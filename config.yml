@@ -20,3 +20,10 @@ database:
     password: 'waffle'
     #SSL connection
     sslEnabled: false
+
+general:
+  #Automatically save inventory every x min. If false player inventory is only saved by disconnect (true/false)
+  autosave: true
+  #autosave interval (time in min)
+  autosaveinterval: 5
+

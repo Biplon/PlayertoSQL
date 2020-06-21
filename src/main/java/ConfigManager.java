@@ -25,7 +25,7 @@ public class ConfigManager
         }
     }
 
-    public static String getConfigvalue(String value)
+    public static String getConfigvalueString(String value)
     {
         if (!PlayertoSql.getInstance().getConfig().contains(value))
         {
@@ -35,6 +35,19 @@ public class ConfigManager
         else
         {
             return PlayertoSql.getInstance().getConfig().getString(value);
+        }
+    }
+
+    public static int getConfigvalueInt(String value)
+    {
+        if (!PlayertoSql.getInstance().getConfig().contains(value))
+        {
+            PlayertoSql.getInstance().getLogger().severe("Value: " + value + " not found in config.yml of" + PlayertoSql.getInstance().getName());
+            return 0;
+        }
+        else
+        {
+            return PlayertoSql.getInstance().getConfig().getInt(value);
         }
     }
 }

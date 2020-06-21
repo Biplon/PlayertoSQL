@@ -36,7 +36,7 @@ public class PlayerManager
         savePlayer(uuid, inventory, armor, offhand, enderchest);
     }
 
-    private void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
+    public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
         if (!DatabaseManager.getInstance().savePlayerInventoryData(uuid, inventory))
         {

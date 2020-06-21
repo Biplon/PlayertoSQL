@@ -134,11 +134,11 @@ public class DatabaseManager
 
     private void loadConfigValues()
     {
-        dbname = ConfigManager.getConfigvalue("database.mysql.databaseName");
-        playertablename = ConfigManager.getConfigvalue("database.mysql.tableNameplayer");
-        playerinventorytablename = ConfigManager.getConfigvalue("database.mysql.tableNameinventory");
-        playerintentoryarmortablename = ConfigManager.getConfigvalue("database.mysql.tableNamearmor");
-        playerenderchesttablename = ConfigManager.getConfigvalue("database.mysql.tableNameenderchest");
+        dbname = ConfigManager.getConfigvalueString("database.mysql.databaseName");
+        playertablename = ConfigManager.getConfigvalueString("database.mysql.tableNameplayer");
+        playerinventorytablename = ConfigManager.getConfigvalueString("database.mysql.tableNameinventory");
+        playerintentoryarmortablename = ConfigManager.getConfigvalueString("database.mysql.tableNamearmor");
+        playerenderchesttablename = ConfigManager.getConfigvalueString("database.mysql.tableNameenderchest");
 
         Date dt = new Date();
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -147,9 +147,9 @@ public class DatabaseManager
 
     private void createConnection(boolean reconnect) throws SQLException
     {
-        String username = ConfigManager.getConfigvalue("database.mysql.user");
-        String password = ConfigManager.getConfigvalue("database.mysql.password");
-        String server = "jdbc:mysql://" + ConfigManager.getConfigvalue("database.mysql.host") + ":" + ConfigManager.getConfigvalue("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true";
+        String username = ConfigManager.getConfigvalueString("database.mysql.user");
+        String password = ConfigManager.getConfigvalueString("database.mysql.password");
+        String server = "jdbc:mysql://" + ConfigManager.getConfigvalueString("database.mysql.host") + ":" + ConfigManager.getConfigvalueString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true";
 
         connection = DriverManager.getConnection(server, username, password);
     }

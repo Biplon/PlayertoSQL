@@ -3,6 +3,7 @@ package main.java;
 import main.java.database.DatabaseManager;
 import main.java.event.PlayerJoin;
 import main.java.event.PlayerQuit;
+import main.java.player.AutosaveManager;
 import main.java.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -12,6 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class PlayertoSql extends JavaPlugin
 {
     static PlayertoSql instance;
+
+    AutosaveManager autosaveManager;
 
     static PlayerManager playerManager;
 
@@ -26,6 +29,10 @@ public class PlayertoSql extends JavaPlugin
             PluginManager pm = getServer().getPluginManager();
             pm.registerEvents(new PlayerJoin(), this);
             pm.registerEvents(new PlayerQuit(), this);
+            if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
+            {
+                autosaveManager = new AutosaveManager();
+            }
         }
         catch (Exception e)
         {
@@ -38,9 +45,13 @@ public class PlayertoSql extends JavaPlugin
     public void onDisable()
     {
        playerManager.trySaveMissingPlayerData();
+        if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
+        {
+            autosaveManager.onShutDownautosave();
+        }
        DatabaseManager.getInstance().closeConnection();
        HandlerList.unregisterAll(this);
-        Bukkit.getLogger().info("[PlayertoSql] has been disabled!");
+       Bukkit.getLogger().info("[PlayertoSql] has been disabled!");
     }
 
     public static PlayertoSql getInstance()
