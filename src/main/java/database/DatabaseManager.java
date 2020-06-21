@@ -30,6 +30,9 @@ public class DatabaseManager
     static String updatearmorStatment = "";
     static String updateenderchestStatment = "";
 
+    public static byte inventorylenght = 36;
+    public static byte enderchestlenght = 27;
+
     public DatabaseManager()
     {
         instance = this;
@@ -43,7 +46,7 @@ public class DatabaseManager
             createSlotqueryString();
             setupTables();
         }
-        catch (SQLException | ClassNotFoundException ex)
+        catch (SQLException ex)
         {
             PlayertoSql.getInstance().getLogger().severe("SQLException: " + ex.getMessage());
         }
@@ -59,7 +62,7 @@ public class DatabaseManager
     private void createStatmentStrings()
     {
         updateinventoryStatment = "Update " + dbname + "." + playerinventorytablename + " SET ";
-        for (int i = 0; i < 36; i++)
+        for (int i = 0; i < inventorylenght; i++)
         {
             if (i < 10)
             {
@@ -84,7 +87,7 @@ public class DatabaseManager
 
 
         updateenderchestStatment = "Update " + dbname + "." + playerenderchesttablename + " SET ";
-        for (int i = 0; i < 27; i++)
+        for (int i = 0; i < enderchestlenght; i++)
         {
             if (i < 10)
             {
@@ -102,7 +105,7 @@ public class DatabaseManager
 
     private void createSlotqueryString()
     {
-        for (int i = 0; i < 36; i++)
+        for (int i = 0; i < inventorylenght; i++)
         {
             if (i < 10)
             {
@@ -115,7 +118,7 @@ public class DatabaseManager
 
         }
 
-        for (int i = 0; i < 27; i++)
+        for (int i = 0; i < enderchestlenght; i++)
         {
             if (i < 10)
             {
@@ -142,11 +145,11 @@ public class DatabaseManager
         date = sdf.format(dt);
     }
 
-    private void createConnection(boolean reconnect) throws SQLException, ClassNotFoundException
+    private void createConnection(boolean reconnect) throws SQLException
     {
         String username = ConfigManager.getConfigvalue("database.mysql.user");
         String password = ConfigManager.getConfigvalue("database.mysql.password");
-        String server = "jdbc:mysql://" + ConfigManager.getConfigvalue("database.mysql.host") + ":" + ConfigManager.getConfigvalue("database.mysql.port") + "/" + dbname + "?allowMultiQueries=true&rewriteBatchedStatements=true";
+        String server = "jdbc:mysql://" + ConfigManager.getConfigvalue("database.mysql.host") + ":" + ConfigManager.getConfigvalue("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true";
 
         connection = DriverManager.getConnection(server, username, password);
     }
@@ -162,38 +165,6 @@ public class DatabaseManager
         catch (SQLException e)
         {
             e.printStackTrace();
-        }
-    }
-
-    public Connection getConnection()
-    {
-        checkConnection();
-        return connection;
-    }
-
-    private void checkConnection()
-    {
-        try
-        {
-            if (connection == null)
-            {
-                PlayertoSql.getInstance().getLogger().warning(PlayertoSql.getInstance().getName() + " Database connection lost");
-                createConnection(true);
-            }
-            if (!connection.isValid(3))
-            {
-                PlayertoSql.getInstance().getLogger().warning(PlayertoSql.getInstance().getName() + " Database connection is idle or terminated. Try to reconnect...");
-                createConnection(true);
-            }
-            if (connection.isClosed())
-            {
-                PlayertoSql.getInstance().getLogger().warning(PlayertoSql.getInstance().getName() + " Database connection is closed. Try to reconnect...");
-                createConnection(true);
-            }
-        }
-        catch (Exception e)
-        {
-            PlayertoSql.getInstance().getLogger().severe(PlayertoSql.getInstance().getName() + " Could not reconnect to Database! Error: " + e.getMessage());
         }
     }
 
@@ -272,7 +243,7 @@ public class DatabaseManager
         if (connection != null)
         {
             String data = "";
-            PreparedStatement query = null;
+            PreparedStatement query;
             try
             {
                 data = "Insert into " + dbname + "." + playertablename + " (uuid_player, name, last_login) values('" + p.getUniqueId() + "','" + p.getName() + "','" + date + "'); ";
@@ -299,7 +270,7 @@ public class DatabaseManager
         if (connection != null)
         {
             String data = "";
-            PreparedStatement query = null;
+            PreparedStatement query;
             try
             {
                 data = "Update " + dbname + "." + playertablename + " Set name='" + p.getName() + "', last_login='" + date + "' where uuid_player='" + p.getUniqueId() + "'; ";
@@ -350,7 +321,7 @@ public class DatabaseManager
             {
                 String[] tmp = ItemManager.getItemstackData(items);
                 PreparedStatement query = connection.prepareStatement(updateinventoryStatment);
-                for (int i = 1; i <= 36; i++)
+                for (int i = 1; i <= inventorylenght; i++)
                 {
                     query.setString(i, tmp[i - 1]);
                 }
@@ -363,7 +334,6 @@ public class DatabaseManager
             {
                 e.printStackTrace();
                 PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                PlayertoSql.getInstance().getLogger().severe(updateinventoryStatment);
                 return false;
             }
         }
@@ -380,7 +350,7 @@ public class DatabaseManager
             {
                 String[] tmp = ItemManager.getItemstackData(items);
                 PreparedStatement query = connection.prepareStatement(updateenderchestStatment);
-                for (int i = 1; i <= 27; i++)
+                for (int i = 1; i <= enderchestlenght; i++)
                 {
                     query.setString(i, tmp[i - 1]);
                 }
@@ -393,7 +363,6 @@ public class DatabaseManager
             {
                 e.printStackTrace();
                 PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                PlayertoSql.getInstance().getLogger().severe(updateenderchestStatment);
                 return false;
             }
         }
@@ -435,7 +404,7 @@ public class DatabaseManager
         if (connection != null)
         {
             String data = "";
-            PreparedStatement query = null;
+            PreparedStatement query;
             try
             {
                 data = "SELECT * FROM " + dbname + "." + playerinventorytablename + " where uuid_player='" + uuid + "'; ";
@@ -459,7 +428,7 @@ public class DatabaseManager
         if (connection != null)
         {
             String data = "";
-            PreparedStatement query = null;
+            PreparedStatement query;
             try
             {
                 data = "SELECT * FROM " + dbname + "." + playerintentoryarmortablename + " where uuid_player='" + uuid + "'; ";
@@ -483,7 +452,7 @@ public class DatabaseManager
         if (connection != null)
         {
             String data = "";
-            PreparedStatement query = null;
+            PreparedStatement query;
             try
             {
                 data = "SELECT * FROM " + dbname + "." + playerenderchesttablename + " where uuid_player='" + uuid + "'; ";
