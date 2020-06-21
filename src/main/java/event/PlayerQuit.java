@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerQuit implements Listener
 {
@@ -19,7 +18,7 @@ public class PlayerQuit implements Listener
             if (event.getPlayer() != null)
             {
                 Player p = event.getPlayer();
-                PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(),p.getInventory().getStorageContents(),p.getInventory().getArmorContents(),p.getInventory().getExtraContents(),p.getEnderChest().getContents());
+                PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
             }
         }, 2L);
 

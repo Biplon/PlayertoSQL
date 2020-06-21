@@ -12,17 +12,17 @@ public class PlayerJoin implements Listener
     @EventHandler
     public void onLogin(final PlayerJoinEvent event)
     {
-            final Player p = event.getPlayer();
-            Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
+        final Player p = event.getPlayer();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
+        {
+            if (p != null)
             {
-                if (p != null)
+                if (p.isOnline())
                 {
-                    if (p.isOnline())
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
-                    }
+                    PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
                 }
-            }, 5L);
+            }
+        }, 5L);
 
     }
 }

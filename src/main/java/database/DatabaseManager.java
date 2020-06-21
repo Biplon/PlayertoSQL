@@ -1,10 +1,8 @@
 package main.java.database;
 
-import com.sun.xml.internal.txw2.output.StreamSerializer;
 import main.java.ConfigManager;
 import main.java.PlayertoSql;
 import main.java.player.ItemManager;
-import net.minecraft.server.v1_15_R1.InventoryUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,7 +29,6 @@ public class DatabaseManager
     static String updateinventoryStatment = "";
     static String updatearmorStatment = "";
     static String updateenderchestStatment = "";
-    static String updateplayerStatment = "";
 
     public DatabaseManager()
     {
@@ -297,6 +294,30 @@ public class DatabaseManager
         return false;
     }
 
+    public boolean updatePlayerData(Player p)
+    {
+        if (connection != null)
+        {
+            String data = "";
+            PreparedStatement query = null;
+            try
+            {
+                data = "Update " + dbname + "." + playertablename + " Set name='" + p.getName() + "', last_login='" + date + "' where uuid_player='" + p.getUniqueId() + "'; ";
+                query = connection.prepareStatement(data);
+                query.execute();
+                return true;
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
+                PlayertoSql.getInstance().getLogger().severe(data);
+                return false;
+            }
+        }
+        return false;
+    }
+
     public boolean isPlayerexist(String uuid)
     {
         if (connection != null)
@@ -408,76 +429,77 @@ public class DatabaseManager
         }
         return false;
     }
-        public ResultSet loadPlayerInventoryData (String uuid)
+
+    public ResultSet loadPlayerInventoryData(String uuid)
+    {
+        if (connection != null)
         {
-            if (connection != null)
+            String data = "";
+            PreparedStatement query = null;
+            try
             {
-                String data = "";
-                PreparedStatement query = null;
-                try
-                {
-                    data = "SELECT * FROM " + dbname + "." + playerinventorytablename + " where uuid_player='" + uuid + "'; ";
+                data = "SELECT * FROM " + dbname + "." + playerinventorytablename + " where uuid_player='" + uuid + "'; ";
 
-                    query = connection.prepareStatement(data);
-                    return query.executeQuery();
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                    PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                    PlayertoSql.getInstance().getLogger().severe(data);
-                    return null;
-                }
+                query = connection.prepareStatement(data);
+                return query.executeQuery();
             }
-            return null;
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
+                PlayertoSql.getInstance().getLogger().severe(data);
+                return null;
+            }
         }
+        return null;
+    }
 
-        public ResultSet loadPlayerArmor (String uuid)
+    public ResultSet loadPlayerArmor(String uuid)
+    {
+        if (connection != null)
         {
-            if (connection != null)
+            String data = "";
+            PreparedStatement query = null;
+            try
             {
-                String data = "";
-                PreparedStatement query = null;
-                try
-                {
-                    data = "SELECT * FROM " + dbname + "." + playerintentoryarmortablename + " where uuid_player='" + uuid + "'; ";
+                data = "SELECT * FROM " + dbname + "." + playerintentoryarmortablename + " where uuid_player='" + uuid + "'; ";
 
-                    query = connection.prepareStatement(data);
-                    return query.executeQuery();
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                    PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                    PlayertoSql.getInstance().getLogger().severe(data);
-                    return null;
-                }
+                query = connection.prepareStatement(data);
+                return query.executeQuery();
             }
-            return null;
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
+                PlayertoSql.getInstance().getLogger().severe(data);
+                return null;
+            }
         }
+        return null;
+    }
 
-        public ResultSet loadPlayerEnderchestData (String uuid)
+    public ResultSet loadPlayerEnderchestData(String uuid)
+    {
+        if (connection != null)
         {
-            if (connection != null)
+            String data = "";
+            PreparedStatement query = null;
+            try
             {
-                String data = "";
-                PreparedStatement query = null;
-                try
-                {
-                    data = "SELECT * FROM " + dbname + "." + playerenderchesttablename + " where uuid_player='" + uuid + "'; ";
+                data = "SELECT * FROM " + dbname + "." + playerenderchesttablename + " where uuid_player='" + uuid + "'; ";
 
-                    query = connection.prepareStatement(data);
-                    return query.executeQuery();
-                }
-                catch (SQLException e)
-                {
-                    e.printStackTrace();
-                    PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                    PlayertoSql.getInstance().getLogger().severe(data);
-                    return null;
-                }
+                query = connection.prepareStatement(data);
+                return query.executeQuery();
             }
-            return null;
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+                PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
+                PlayertoSql.getInstance().getLogger().severe(data);
+                return null;
+            }
         }
+        return null;
+    }
 
 }

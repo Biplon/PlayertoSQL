@@ -8,7 +8,7 @@ public class ConfigManager
     protected static void loadConfig()
     {
 
-        File configFile = new File("plugins" + File.separator +   PlayertoSql.getInstance().getName() + File.separator + "config.yml");
+        File configFile = new File("plugins" + File.separator + PlayertoSql.getInstance().getName() + File.separator + "config.yml");
         if (!configFile.exists())
         {
             PlayertoSql.getInstance().getLogger().info("Creating config ...");

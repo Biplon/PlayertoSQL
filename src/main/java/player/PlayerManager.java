@@ -7,15 +7,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class PlayerManager
 {
-    private Set<Player> playersInSync = new HashSet<Player>();
-    private Set<Player> playersDisconnectSave = new HashSet<Player>();
-
-
     public void onPlayerJoin(final Player p)
     {
         if (DatabaseManager.getInstance().isPlayerexist(p.getUniqueId().toString()))
@@ -24,27 +18,28 @@ public class PlayerManager
         }
         else
         {
-               DatabaseManager.getInstance().createPlayer(p);
-               savePlayer(p.getUniqueId().toString(),p.getInventory().getStorageContents(),p.getInventory().getArmorContents(),p.getInventory().getExtraContents(),p.getEnderChest().getContents());
+            DatabaseManager.getInstance().createPlayer(p);
+            savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
         }
     }
 
-    public void onPlayerQuit(String uuid, ItemStack[] inventory,ItemStack[] armor,ItemStack[] offhand,ItemStack[] enderchest)
+    public void onPlayerQuit(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
-        savePlayer(uuid,inventory,armor,offhand,enderchest);
+        savePlayer(uuid, inventory, armor, offhand, enderchest);
     }
 
 
-    private void savePlayer(String uuid, ItemStack[] inventory,ItemStack[] armor,ItemStack[] offhand,ItemStack[] enderchest)
+    private void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
-        DatabaseManager.getInstance().savePlayerInventoryData(uuid,inventory);
-        DatabaseManager.getInstance().savePlayerArmor(uuid,armor,offhand);
-        DatabaseManager.getInstance().savePlayerEnderchestData(uuid,enderchest);
+        DatabaseManager.getInstance().savePlayerInventoryData(uuid, inventory);
+        DatabaseManager.getInstance().savePlayerArmor(uuid, armor, offhand);
+        DatabaseManager.getInstance().savePlayerEnderchestData(uuid, enderchest);
     }
 
 
     private void loadPlayer(Player p)
     {
+        DatabaseManager.getInstance().updatePlayerData(p);
         ResultSet rs;
         rs = DatabaseManager.getInstance().loadPlayerInventoryData(p.getUniqueId().toString());
         String[] values = new String[36];
@@ -60,7 +55,7 @@ public class PlayerManager
                 }
                 else
                 {
-                    values[i] =rs.getNString("slot_" + i + "_id");
+                    values[i] = rs.getNString("slot_" + i + "_id");
                 }
 
                 p.getInventory().setContents(ItemManager.setItemstackData(values));
@@ -78,7 +73,7 @@ public class PlayerManager
                 }
                 else
                 {
-                    values[i] =rs.getNString("slot_" + i + "_id");
+                    values[i] = rs.getNString("slot_" + i + "_id");
                 }
 
                 p.getEnderChest().setContents(ItemManager.setItemstackData(values));
