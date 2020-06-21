@@ -1,0 +1,22 @@
+database:
+  mysql:
+    #Server address
+    host: 127.0.0.1
+    #Server port (default 3306)
+    port: 3306
+    #Database name (Need to exist)
+    databaseName: 'dbname'
+    #Tables name player (will auto create)
+    tableNameplayer: 'pts_player'
+    #Tables name inventory (will auto create)
+    tableNameinventory: 'pts_player_inventory'
+    #Tables name armor(will auto create)
+    tableNamearmor: 'pts_player_inventory_armor'
+    #Tables name enderchest(will auto create)
+    tableNameenderchest: 'pts_player_inventory_enderchest'
+    #User name
+    user: 'admin'
+    #User password
+    password: 'waffle'
+    #SSL connection
+    sslEnabled: false
