@@ -147,9 +147,14 @@ public class DatabaseManager
 
     private void createConnection(boolean reconnect) throws SQLException
     {
+        String ssl = "";
         String username = ConfigManager.getConfigvalueString("database.mysql.user");
         String password = ConfigManager.getConfigvalueString("database.mysql.password");
-        String server = "jdbc:mysql://" + ConfigManager.getConfigvalueString("database.mysql.host") + ":" + ConfigManager.getConfigvalueString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true";
+        if (ConfigManager.getConfigvalueBool("database.mysql.host"))
+        {
+            ssl = "&sslMode=REQUIRED";
+        }
+        String server = "jdbc:mysql://" + ConfigManager.getConfigvalueString("database.mysql.host") + ":" + ConfigManager.getConfigvalueString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true" + ssl;
 
         connection = DriverManager.getConnection(server, username, password);
     }

@@ -44,14 +44,14 @@ public class PlayertoSql extends JavaPlugin
     @Override
     public void onDisable()
     {
-       playerManager.trySaveMissingPlayerData();
+        playerManager.trySaveMissingPlayerData(true);
         if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
         {
             autosaveManager.onShutDownautosave();
         }
-       DatabaseManager.getInstance().closeConnection();
-       HandlerList.unregisterAll(this);
-       Bukkit.getLogger().info("[PlayertoSql] has been disabled!");
+        DatabaseManager.getInstance().closeConnection();
+        HandlerList.unregisterAll(this);
+        Bukkit.getLogger().info("[PlayertoSql] has been disabled!");
     }
 
     public static PlayertoSql getInstance()

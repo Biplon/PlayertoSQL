@@ -50,4 +50,17 @@ public class ConfigManager
             return PlayertoSql.getInstance().getConfig().getInt(value);
         }
     }
+
+    public static Boolean getConfigvalueBool(String value)
+    {
+        if (!PlayertoSql.getInstance().getConfig().contains(value))
+        {
+            PlayertoSql.getInstance().getLogger().severe("Value: " + value + " not found in config.yml of" + PlayertoSql.getInstance().getName());
+            return false;
+        }
+        else
+        {
+            return PlayertoSql.getInstance().getConfig().getBoolean(value);
+        }
+    }
 }

@@ -15,12 +15,9 @@ public class PlayerJoin implements Listener
         final Player p = event.getPlayer();
         Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
         {
-            if (p != null)
+            if (p.isOnline())
             {
-                if (p.isOnline())
-                {
-                    PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
-                }
+                PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
             }
         }, 5L);
 

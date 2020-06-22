@@ -20,15 +20,15 @@ public class AutosaveManager
 
     private void runTask()
     {
-            Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), new Runnable()
+        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), new Runnable()
+        {
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
-                {
-                    autosave();
-                }
+                autosave();
+            }
 
-            }, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L,ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L);
+        }, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L);
     }
 
     private void autosave()
@@ -46,7 +46,7 @@ public class AutosaveManager
             }
             onlinePlayers.clear();
         }
-
+        PlayertoSql.getInstance().getPlayerManager().trySaveMissingPlayerData(false);
     }
 
     public void onShutDownautosave()
