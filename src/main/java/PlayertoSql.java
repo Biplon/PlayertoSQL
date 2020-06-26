@@ -4,6 +4,7 @@ import main.java.database.DatabaseManager;
 import main.java.event.PlayerJoin;
 import main.java.event.PlayerQuit;
 import main.java.player.AutosaveManager;
+import main.java.player.CommandHandler;
 import main.java.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -29,6 +30,7 @@ public class PlayertoSql extends JavaPlugin
             PluginManager pm = getServer().getPluginManager();
             pm.registerEvents(new PlayerJoin(), this);
             pm.registerEvents(new PlayerQuit(), this);
+            this.getCommand("ptsclear").setExecutor(new CommandHandler());
             if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
             {
                 autosaveManager = new AutosaveManager();

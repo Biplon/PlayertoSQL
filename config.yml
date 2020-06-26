@@ -28,4 +28,6 @@ general:
   autosaveinterval: 5
   #load inventory delay (time in ticks)
   loaddelay: 20
+  #create a file for each player who exit der server and write there Inventory in it(true/false)
+  playerfile: false
 

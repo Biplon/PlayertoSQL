@@ -4,3 +4,11 @@ description: Plugin Player to Sql
 version: 0.7
 main: main.java.PlayertoSql
 depend: [ProtocolLib]
+permissions:
+  pts.ptsclear:
+    description: clear folder
+    default: op
+commands:
+  ptsclear:
+    description: clear folder
+    usage: /ptsclear

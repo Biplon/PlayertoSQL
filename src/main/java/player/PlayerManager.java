@@ -1,16 +1,25 @@
 package main.java.player;
 
+import main.java.ConfigManager;
 import main.java.PlayertoSql;
 import main.java.database.DatabaseManager;
 import main.java.struct.PTSPlayerArmor;
 import main.java.struct.PTSPlayerEnderchest;
 import main.java.struct.PTSPlayerInventory;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class PlayerManager
@@ -18,6 +27,9 @@ public class PlayerManager
     private final ArrayList<PTSPlayerInventory> unsavedPlayerInventory = new ArrayList();
     private final ArrayList<PTSPlayerArmor> unsavedPlayerArmor = new ArrayList();
     private final ArrayList<PTSPlayerEnderchest> unsavedPlayerEnderchest = new ArrayList();
+
+    Date time = new Date();
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 
     public void onPlayerJoin(final Player p)
     {
@@ -35,6 +47,85 @@ public class PlayerManager
     public void onPlayerQuit(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
         savePlayer(uuid, inventory, armor, offhand, enderchest);
+        if(ConfigManager.getConfigvalueBool("general.playerfile"))
+        {
+            savePlayerfile(uuid, inventory, armor, offhand, enderchest);
+        }
+    }
+
+    public void clearPlayerfile()
+    {
+        File folder = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/");
+        try
+        {
+            FileUtils.cleanDirectory(folder);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void savePlayerfile(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
+    {
+        try
+        {
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/"+ uuid +" "+ sdf.format(time)+".txt");
+            if (!save_file.exists())
+            {
+                save_file.getParentFile().mkdirs();
+                save_file.createNewFile();
+            }
+            BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
+            bw.write("inventory");
+            bw.newLine();
+            for (ItemStack item: inventory)
+            {
+                if (item !=null)
+                {
+                    bw.write(item.toString());
+                    bw.newLine();
+                }
+            }
+            bw.write("armor");
+            bw.newLine();
+            for (ItemStack item: armor)
+            {
+                if (item !=null)
+                {
+                    bw.write(item.toString());
+                    bw.newLine();
+                }
+            }
+            bw.write("offhand");
+            bw.newLine();
+            for (ItemStack item: offhand)
+            {
+                if (item !=null)
+                {
+                    bw.write(item.toString());
+                    bw.newLine();
+                }
+            }
+            bw.write("enderchest");
+            bw.newLine();
+            for (ItemStack item: enderchest)
+            {
+                if (item !=null)
+                {
+                    bw.write(item.toString());
+                    bw.newLine();
+                }
+            }
+            bw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
