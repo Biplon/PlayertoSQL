@@ -26,4 +26,6 @@ general:
   autosave: true
   #autosave interval (time in min)
   autosaveinterval: 5
+  #load inventory delay (time in ticks)
+  loaddelay: 20
 

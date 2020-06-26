@@ -1,5 +1,6 @@
 package main.java.event;
 
+import main.java.ConfigManager;
 import main.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,7 +20,7 @@ public class PlayerJoin implements Listener
             {
                 PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
             }
-        }, 5L);
+        }, ConfigManager.getConfigvalueInt("general.loaddelay"));
 
     }
 }
