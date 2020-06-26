@@ -187,7 +187,7 @@ public class DatabaseManager
                         " (`uuid_player` CHAR(128) NOT NULL," +
                         "`name` CHAR(128) NOT NULL," +
                         "`last_login` DATE NOT NULL," +
-                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB;";
+                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
 
                 query = connection.prepareStatement(data);
                 query.execute();
@@ -195,7 +195,7 @@ public class DatabaseManager
                 data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playerinventorytablename + " " +
                         "(`uuid_player` CHAR(128) NOT NULL," +
                         "" + inventoryslotsforquery + "" +
-                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB;";
+                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
 
                 query = connection.prepareStatement(data);
                 query.execute();
@@ -207,7 +207,7 @@ public class DatabaseManager
                         "`slot_02_id` Text(1000) NULL," +
                         "`slot_03_id` Text(1000) NULL," +
                         "`slot_04_id` Text(1000) NULL," + //offhand
-                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB;";
+                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
 
                 query = connection.prepareStatement(data);
                 query.execute();
@@ -215,7 +215,7 @@ public class DatabaseManager
                 data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playerenderchesttablename + " " +
                         "(`uuid_player` CHAR(128) NOT NULL," +
                         "" + enderinventoryslotsforquery + "" +
-                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB;";
+                        " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
 
                 query = connection.prepareStatement(data);
                 query.execute();
