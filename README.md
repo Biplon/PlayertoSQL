@@ -7,6 +7,6 @@ install:
 put jar in plugins folder start server stop server edit config and magic
 
 requirements:
-spigot 1.15.2, ProtocolLib, Connector/J 
+spigot 1.15.2, ProtocolLib
 
 
