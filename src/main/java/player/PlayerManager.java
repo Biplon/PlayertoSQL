@@ -36,7 +36,10 @@ public class PlayerManager
     {
         if (DatabaseManager.getInstance().isPlayerexist(p.getUniqueId().toString()))
         {
-            loadPlayer(p);
+            if (!disabledplayerload.contains(p.getUniqueId().toString()))
+            {
+                loadPlayer(p);
+            }
         }
         else
         {
@@ -50,14 +53,10 @@ public class PlayerManager
         if (!disabledplayersaves.contains(uuid))
         {
             savePlayer(uuid, inventory, armor, offhand, enderchest);
-            if(ConfigManager.getConfigvalueBool("general.playerfile"))
-            {
-                savePlayerfile(uuid, inventory, armor, offhand, enderchest);
-            }
         }
-        else
+        if(ConfigManager.getConfigvalueBool("general.playerfile"))
         {
-            removeDisablePlayerSave(uuid);
+            savePlayerfile(uuid, inventory, armor, offhand, enderchest);
         }
     }
 
