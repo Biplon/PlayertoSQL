@@ -26,6 +26,8 @@ public class PlayerManager
     private final ArrayList<PTSPlayerArmor> unsavedPlayerArmor = new ArrayList();
     private final ArrayList<PTSPlayerEnderchest> unsavedPlayerEnderchest = new ArrayList();
 
+    private final ArrayList<String> disabledplayersaves = new ArrayList();
+
     Date time = new Date();
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
 
@@ -44,10 +46,17 @@ public class PlayerManager
 
     public void onPlayerQuit(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
-        savePlayer(uuid, inventory, armor, offhand, enderchest);
-        if(ConfigManager.getConfigvalueBool("general.playerfile"))
+        if (!disabledplayersaves.contains(uuid))
         {
-            savePlayerfile(uuid, inventory, armor, offhand, enderchest);
+            savePlayer(uuid, inventory, armor, offhand, enderchest);
+            if(ConfigManager.getConfigvalueBool("general.playerfile"))
+            {
+                savePlayerfile(uuid, inventory, armor, offhand, enderchest);
+            }
+        }
+        else
+        {
+            removeDisablePlayerSave(uuid);
         }
     }
 
@@ -63,6 +72,16 @@ public class PlayerManager
             e.printStackTrace();
         }
 
+    }
+
+    public void addDisablePlayerSave(String uuid)
+    {
+        disabledplayersaves.add(uuid);
+    }
+
+    public void removeDisablePlayerSave(String uuid)
+    {
+        disabledplayersaves.remove(uuid);
     }
 
     private void savePlayerfile(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)

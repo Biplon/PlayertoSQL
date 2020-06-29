@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.command;
 
 import main.java.PlayertoSql;
 import org.bukkit.Bukkit;
@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class CommandHandler implements CommandExecutor
+public class CommandClearPlayerFiles implements CommandExecutor
 {
 
     @Override
