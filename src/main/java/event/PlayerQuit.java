@@ -13,11 +13,11 @@ public class PlayerQuit implements Listener
     public void onDisconnect(final PlayerQuitEvent event)
     {
 
-        Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
+        Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
         {
             Player p = event.getPlayer();
             PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
-        }, 2L);
+        });
 
     }
 }

@@ -6,8 +6,6 @@ import main.java.database.DatabaseManager;
 import main.java.struct.PTSPlayerArmor;
 import main.java.struct.PTSPlayerEnderchest;
 import main.java.struct.PTSPlayerInventory;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +27,7 @@ public class PlayerManager
     private final ArrayList<PTSPlayerEnderchest> unsavedPlayerEnderchest = new ArrayList();
 
     Date time = new Date();
-    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
 
     public void onPlayerJoin(final Player p)
     {
@@ -71,14 +69,16 @@ public class PlayerManager
     {
         try
         {
-            File save_file = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/"+ uuid +" "+ sdf.format(time)+".txt");
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/"+ uuid +".txt");
             if (!save_file.exists())
             {
                 save_file.getParentFile().mkdirs();
                 save_file.createNewFile();
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
-            bw.write("inventory");
+            bw.write("=======["+sdf.format(time)+"]=======");
+            bw.newLine();
+            bw.write("[inventory]");
             bw.newLine();
             for (ItemStack item: inventory)
             {
@@ -88,7 +88,7 @@ public class PlayerManager
                     bw.newLine();
                 }
             }
-            bw.write("armor");
+            bw.write("[armor]");
             bw.newLine();
             for (ItemStack item: armor)
             {
@@ -98,7 +98,7 @@ public class PlayerManager
                     bw.newLine();
                 }
             }
-            bw.write("offhand");
+            bw.write("[offhand]");
             bw.newLine();
             for (ItemStack item: offhand)
             {
@@ -108,7 +108,7 @@ public class PlayerManager
                     bw.newLine();
                 }
             }
-            bw.write("enderchest");
+            bw.write("[enderchest]");
             bw.newLine();
             for (ItemStack item: enderchest)
             {
