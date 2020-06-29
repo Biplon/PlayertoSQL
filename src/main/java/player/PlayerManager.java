@@ -27,11 +27,12 @@ public class PlayerManager
     private final ArrayList<PTSPlayerEnderchest> unsavedPlayerEnderchest = new ArrayList();
 
     private final ArrayList<String> disabledplayersaves = new ArrayList();
+    private final ArrayList<String> disabledplayerload = new ArrayList();
 
     Date time = new Date();
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
 
-    public void onPlayerJoin(final Player p)
+    public void onPlayerJoin(Player p)
     {
         if (DatabaseManager.getInstance().isPlayerexist(p.getUniqueId().toString()))
         {
@@ -82,6 +83,16 @@ public class PlayerManager
     public void removeDisablePlayerSave(String uuid)
     {
         disabledplayersaves.remove(uuid);
+    }
+
+    public void addDisablePlayerLoad(String uuid)
+    {
+        disabledplayerload.add(uuid);
+    }
+
+    public void removeDisablePlayerLoad(String uuid)
+    {
+        disabledplayerload.remove(uuid);
     }
 
     private void savePlayerfile(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)

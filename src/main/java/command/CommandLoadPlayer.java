@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class CommandSavePlayer implements CommandExecutor
+public class CommandLoadPlayer implements CommandExecutor
 {
 
     @Override
@@ -20,7 +20,7 @@ public class CommandSavePlayer implements CommandExecutor
             if (commandSender instanceof Player)
             {
                 Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptssaveplayer"))
+                if (!player.hasPermission("pts.ptsloadplayer"))
                 {
                     return false;
                 }
@@ -31,7 +31,7 @@ public class CommandSavePlayer implements CommandExecutor
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
                     {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+                        PlayertoSql.getInstance().getPlayerManager().onPlayerJoin (p);
                     });
                     return true;
                 }
@@ -41,3 +41,5 @@ public class CommandSavePlayer implements CommandExecutor
         return false;
     }
 }
+
+

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class CommandSavePlayer implements CommandExecutor
+public class CommandAddDisablePlayerLoad implements CommandExecutor
 {
 
     @Override
@@ -29,10 +29,7 @@ public class CommandSavePlayer implements CommandExecutor
             {
                 if(p.getName().equals(args[0]))
                 {
-                    Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
-                    });
+                    PlayertoSql.getInstance().getPlayerManager().addDisablePlayerLoad(p.getUniqueId().toString());
                     return true;
                 }
             }
@@ -41,3 +38,5 @@ public class CommandSavePlayer implements CommandExecutor
         return false;
     }
 }
+
+
