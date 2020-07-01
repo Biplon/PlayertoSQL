@@ -26,8 +26,8 @@ public class PlayerManager
     private final ArrayList<PTSPlayerArmor> unsavedPlayerArmor = new ArrayList();
     private final ArrayList<PTSPlayerEnderchest> unsavedPlayerEnderchest = new ArrayList();
 
-    private final ArrayList<String> disabledplayersaves = new ArrayList();
-    private final ArrayList<String> disabledplayerload = new ArrayList();
+    public final ArrayList<String> disabledplayersaves = new ArrayList();
+    public final ArrayList<String> disabledplayerload = new ArrayList();
 
     Date time = new Date();
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
@@ -332,7 +332,7 @@ public class PlayerManager
         }
     }
 
-    private void loadPlayer(Player p)
+    public void loadPlayer(Player p)
     {
         DatabaseManager.getInstance().updatePlayerData(p);
         ResultSet rs;
