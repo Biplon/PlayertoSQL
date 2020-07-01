@@ -1,5 +1,6 @@
 package main.java;
 
+import main.java.api.Playermanagement;
 import main.java.command.CommandAddDisablePlayerSaves;
 import main.java.command.CommandRemoveDisablePlayerSaves;
 import main.java.command.CommandSavePlayer;
@@ -22,6 +23,8 @@ public class PlayertoSql extends JavaPlugin
 
     static PlayerManager playerManager;
 
+    public static Playermanagement pm;
+
     public void onEnable()
     {
         instance = this;
@@ -30,6 +33,7 @@ public class PlayertoSql extends JavaPlugin
             ConfigManager.loadConfig();
             new DatabaseManager();
             playerManager = new PlayerManager();
+            pm = new Playermanagement();
             PluginManager pm = getServer().getPluginManager();
             pm.registerEvents(new PlayerJoin(), this);
             pm.registerEvents(new PlayerQuit(), this);

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class Playermanagement
 {
+
     public boolean savePlayerSync(Player p)
     {
         if (!PlayertoSql.getInstance().getPlayerManager().disabledplayersaves.contains(p.getUniqueId().toString()))
