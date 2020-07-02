@@ -30,5 +30,4 @@ public class PTSPlayerArmor
     {
         return uuid;
     }
-
 }

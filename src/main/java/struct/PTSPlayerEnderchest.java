@@ -4,7 +4,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class PTSPlayerEnderchest
 {
-
     private final String uuid;
     private final ItemStack[] inventoryEnderchest;
 
@@ -23,5 +22,4 @@ public class PTSPlayerEnderchest
     {
         return uuid;
     }
-
 }

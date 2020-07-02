@@ -1,12 +1,22 @@
 package main.java.api;
 
 import main.java.PlayertoSql;
-import main.java.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class Playermanagement
 {
+    public static Playermanagement instance;
+
+    public Playermanagement()
+    {
+        instance = this;
+    }
+
+    public Playermanagement getInstance()
+    {
+        return instance;
+    }
 
     public boolean savePlayerSync(Player p)
     {

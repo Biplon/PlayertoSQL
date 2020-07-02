@@ -1,7 +1,6 @@
 package main.java.command;
 
 import main.java.PlayertoSql;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,9 +24,9 @@ public class CommandRemoveDisablePlayerLoad implements CommandExecutor
                     return false;
                 }
             }
-            for(Player p : getServer().getOnlinePlayers())
+            for (Player p : getServer().getOnlinePlayers())
             {
-                if(p.getName().equals(args[0]))
+                if (p.getName().equals(args[0]))
                 {
                     PlayertoSql.getInstance().getPlayerManager().removeDisablePlayerLoad(p.getUniqueId().toString());
                     return true;

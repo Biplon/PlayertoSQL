@@ -20,20 +20,11 @@ public class AutosaveManager
 
     private void runTask()
     {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                autosave();
-            }
-
-        }, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), () -> autosave(), ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L, ConfigManager.getConfigvalueInt("general.autosaveinterval") * 60 * 20L);
     }
 
     private void autosave()
     {
-
         if (!Bukkit.getOnlinePlayers().isEmpty())
         {
             List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());

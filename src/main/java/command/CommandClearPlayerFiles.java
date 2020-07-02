@@ -30,6 +30,5 @@ public class CommandClearPlayerFiles implements CommandExecutor
         {
             return false;
         }
-
     }
 }

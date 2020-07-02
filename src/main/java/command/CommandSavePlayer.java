@@ -25,14 +25,12 @@ public class CommandSavePlayer implements CommandExecutor
                     return false;
                 }
             }
-            for(Player p : getServer().getOnlinePlayers())
+            for (Player p : getServer().getOnlinePlayers())
             {
-                if(p.getName().equals(args[0]))
+                if (p.getName().equals(args[0]))
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
-                    });
+                            PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents()));
                     return true;
                 }
             }

@@ -24,9 +24,9 @@ public class CommandRemoveDisablePlayerSaves implements CommandExecutor
                     return false;
                 }
             }
-            for(Player p : getServer().getOnlinePlayers())
+            for (Player p : getServer().getOnlinePlayers())
             {
-                if(p.getName().equals(args[0]))
+                if (p.getName().equals(args[0]))
                 {
                     PlayertoSql.getInstance().getPlayerManager().removeDisablePlayerSave(p.getUniqueId().toString());
                     return true;

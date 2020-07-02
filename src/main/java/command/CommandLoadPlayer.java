@@ -30,13 +30,10 @@ public class CommandLoadPlayer implements CommandExecutor
                 if(p.getName().equals(args[0]))
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerJoin (p);
-                    });
+                            PlayertoSql.getInstance().getPlayerManager().onPlayerJoin (p));
                     return true;
                 }
             }
-
         }
         return false;
     }

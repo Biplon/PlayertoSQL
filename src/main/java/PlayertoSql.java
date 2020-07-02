@@ -23,8 +23,6 @@ public class PlayertoSql extends JavaPlugin
 
     static PlayerManager playerManager;
 
-    public static Playermanagement pm;
-
     public void onEnable()
     {
         instance = this;
@@ -33,14 +31,8 @@ public class PlayertoSql extends JavaPlugin
             ConfigManager.loadConfig();
             new DatabaseManager();
             playerManager = new PlayerManager();
-            pm = new Playermanagement();
-            PluginManager pm = getServer().getPluginManager();
-            pm.registerEvents(new PlayerJoin(), this);
-            pm.registerEvents(new PlayerQuit(), this);
-            this.getCommand("ptsclear").setExecutor(new CommandClearPlayerFiles());
-            this.getCommand("ptsdiplsa").setExecutor(new CommandAddDisablePlayerSaves());
-            this.getCommand("ptsenplsa").setExecutor(new CommandRemoveDisablePlayerSaves());
-            this.getCommand("ptssaveplayer").setExecutor(new CommandSavePlayer());
+            regEvents();
+            regCommands();
             if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
             {
                 autosaveManager = new AutosaveManager();
@@ -51,6 +43,21 @@ public class PlayertoSql extends JavaPlugin
             e.printStackTrace();
         }
         Bukkit.getLogger().info("[PlayertoSql] has been enabled!");
+    }
+
+    private void regCommands()
+    {
+        this.getCommand("ptsclear").setExecutor(new CommandClearPlayerFiles());
+        this.getCommand("ptsdiplsa").setExecutor(new CommandAddDisablePlayerSaves());
+        this.getCommand("ptsenplsa").setExecutor(new CommandRemoveDisablePlayerSaves());
+        this.getCommand("ptssaveplayer").setExecutor(new CommandSavePlayer());
+    }
+
+    private void regEvents()
+    {
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new PlayerJoin(), this);
+        pm.registerEvents(new PlayerQuit(), this);
     }
 
     @Override

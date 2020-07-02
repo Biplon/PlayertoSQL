@@ -21,6 +21,5 @@ public class PlayerJoin implements Listener
                 PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
             }
         }, ConfigManager.getConfigvalueInt("general.loaddelay"));
-
     }
 }

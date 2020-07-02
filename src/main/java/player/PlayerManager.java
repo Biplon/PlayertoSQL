@@ -71,7 +71,6 @@ public class PlayerManager
         {
             e.printStackTrace();
         }
-
     }
 
     public void addDisablePlayerSave(String uuid)
@@ -153,8 +152,6 @@ public class PlayerManager
         {
             e.printStackTrace();
         }
-
-
     }
 
     public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
@@ -171,7 +168,6 @@ public class PlayerManager
         {
             unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
         }
-
     }
 
     public void trySaveMissingPlayerData(boolean shutdown)
@@ -186,7 +182,6 @@ public class PlayerManager
                     {
                         writePlayerSaveFailed(unsavedPlayerInventory.get(i).getUuid(), unsavedPlayerInventory.get(i).getInventory(), null, "Inventory");
                     }
-
                 }
                 else
                 {
@@ -205,7 +200,6 @@ public class PlayerManager
                     {
                         writePlayerSaveFailed(unsavedPlayerArmor.get(i).getUuid(), unsavedPlayerArmor.get(i).getInventoryArmor(), unsavedPlayerArmor.get(i).getInventoryOffhand(), "Armor");
                     }
-
                 }
                 else
                 {
@@ -224,14 +218,12 @@ public class PlayerManager
                     {
                         writePlayerSaveFailed(unsavedPlayerEnderchest.get(i).getUuid(), unsavedPlayerEnderchest.get(i).getInventoryEnderchest(), null, "Enderchest");
                     }
-
                 }
                 else
                 {
                     unsavedPlayerEnderchest.set(i, null);
                 }
             }
-
         }
         removeNullfromLists();
     }
@@ -257,7 +249,6 @@ public class PlayerManager
                 PlayertoSql.getInstance().getLogger().severe(i.toString());
             }
         }
-
     }
 
     private boolean isPlayerSaved(String uuid, String inventorytyp)
@@ -348,7 +339,6 @@ public class PlayerManager
                 rs.next();
                 for (int i = 0; i < DatabaseManager.inventorylenght; i++)
                 {
-
                     if (i < 10)
                     {
                         values[i] = rs.getNString("slot_0" + i + "_id");
@@ -361,14 +351,11 @@ public class PlayerManager
                     p.getInventory().setContents(ItemManager.setItemstackData(values));
                 }
                 rs.close();
-
-
             }
             catch (SQLException ex)
             {
                 PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
             }
-
         }
         else
         {
@@ -404,8 +391,6 @@ public class PlayerManager
                     p.getEnderChest().setContents(ItemManager.setItemstackData(values));
                 }
                 rs.close();
-
-
             }
             catch (SQLException ex)
             {
@@ -423,7 +408,6 @@ public class PlayerManager
                     removeUnsavedPlayer(p.getUniqueId().toString(), "enderchest");
                 }
             }
-
         }
         if (isPlayerSaved(p.getUniqueId().toString(), "armor"))
         {
@@ -442,8 +426,6 @@ public class PlayerManager
                 p.getInventory().setArmorContents(ItemManager.setItemstackData(values));
                 p.getInventory().setExtraContents(ItemManager.setItemstackData(values2));
                 rs.close();
-
-
             }
             catch (SQLException ex)
             {
@@ -462,7 +444,6 @@ public class PlayerManager
                     removeUnsavedPlayer(p.getUniqueId().toString(), "armor");
                 }
             }
-
         }
 
     }

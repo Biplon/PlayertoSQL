@@ -50,8 +50,6 @@ public class DatabaseManager
         {
             PlayertoSql.getInstance().getLogger().severe("SQLException: " + ex.getMessage());
         }
-
-
     }
 
     public static DatabaseManager getInstance()
@@ -72,7 +70,6 @@ public class DatabaseManager
             {
                 updateinventoryStatment += "slot_" + i + "_id= ?,";
             }
-
         }
         updateinventoryStatment = updateinventoryStatment.substring(0, updateinventoryStatment.length() - 1);
         updateinventoryStatment += " where uuid_player= ?;";
@@ -97,7 +94,6 @@ public class DatabaseManager
             {
                 updateenderchestStatment += "slot_" + i + "_id= ?,";
             }
-
         }
         updateenderchestStatment = updateenderchestStatment.substring(0, updateenderchestStatment.length() - 1);
         updateenderchestStatment += " where uuid_player= ?;";
@@ -115,7 +111,6 @@ public class DatabaseManager
             {
                 inventoryslotsforquery.append("`slot_").append(i).append("_id` Text(1000) NULL,");
             }
-
         }
 
         for (int i = 0; i < enderchestlenght; i++)
@@ -128,7 +123,6 @@ public class DatabaseManager
             {
                 enderinventoryslotsforquery.append("`slot_").append(i).append("_id` Text(1000) NULL,");
             }
-
         }
     }
 
@@ -181,7 +175,6 @@ public class DatabaseManager
             PreparedStatement query = null;
             try
             {
-
 
                 data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playertablename + "" +
                         " (`uuid_player` CHAR(128) NOT NULL," +
@@ -475,5 +468,4 @@ public class DatabaseManager
         }
         return null;
     }
-
 }

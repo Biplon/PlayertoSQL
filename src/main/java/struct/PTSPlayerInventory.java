@@ -22,5 +22,4 @@ public class PTSPlayerInventory
     {
         return uuid;
     }
-
 }
