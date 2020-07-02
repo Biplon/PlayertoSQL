@@ -15,7 +15,7 @@ public class PlayerQuit implements Listener
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
         {
             Player p = event.getPlayer();
-            PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+            PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
         });
     }
 }

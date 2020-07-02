@@ -315,6 +315,7 @@ public class DatabaseManager
     {
         if (connection != null)
         {
+
             try
             {
                 String[] tmp = ItemManager.getItemstackData(items);

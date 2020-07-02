@@ -28,6 +28,7 @@ public class PlayertoSql extends JavaPlugin
             ConfigManager.loadConfig();
             new DatabaseManager();
             playerManager = new PlayerManager();
+            new Playermanagement();
             regEvents();
             regCommands();
             if (ConfigManager.getConfigvalueString("general.autosave").equals("true"))
