@@ -1,7 +1,7 @@
 name: PlayertoSql
 author: Vestri
 description: Plugin Player to Sql
-version: 0.13
+version: 0.14
 main: main.java.PlayertoSql
 depend: [ProtocolLib]
 permissions:
@@ -29,22 +29,22 @@ permissions:
 commands:
   ptsclear:
     description: clear folder
-    usage: /ptsclear
+    usage: /ptsclear <player>
   ptsdiplsa:
     description: add player to disable on saves
-    usage: /ptsadddisableplayersaves
+    usage: /ptsdiplsa <player>
   ptsenplsa:
     description: remove player from disable on saves
-    usage: /ptsremovedisableplayersaves
+    usage: /ptsenplsa <player>
   ptssaveplayer:
     description: save player
-    usage: /ptssaveplayer
+    usage: /ptssaveplayer <player> [sync]
   ptsdipllo:
     description: add player to disable load on join
-    usage: /ptsadddisableplayerload
+    usage: /ptsdipllo <player>
   ptsenpllo:
     description: remove player from load on join
-    usage: /ptsremovedisableplayerload
+    usage: /ptsenpllo <player>
   ptsloadplayer:
     description: load player
-    usage: /ptsloadplayer
+    usage: /ptsloadplayer <player> [sync]

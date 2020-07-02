@@ -15,16 +15,17 @@ public class CommandSavePlayer implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
+        if (commandSender instanceof Player)
+        {
+            Player player = (Player) commandSender;
+            if (!player.hasPermission("pts.ptssaveplayer"))
+            {
+                return false;
+            }
+        }
         if (args.length == 1)
         {
-            if (commandSender instanceof Player)
-            {
-                Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptssaveplayer"))
-                {
-                    return false;
-                }
-            }
+
             for (Player p : getServer().getOnlinePlayers())
             {
                 if (p.getName().equals(args[0]))
@@ -35,6 +36,21 @@ public class CommandSavePlayer implements CommandExecutor
                 }
             }
 
+        }
+        else if (args.length == 2)
+        {
+            if (args[1].equalsIgnoreCase("sync"))
+            {
+                for (Player p : getServer().getOnlinePlayers())
+                {
+                    if (p.getName().equals(args[0]))
+                    {
+                        PlayertoSql.getInstance().getPlayerManager().onPlayerQuit(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
         return false;
     }

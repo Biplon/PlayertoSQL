@@ -15,26 +15,43 @@ public class CommandLoadPlayer implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
+        if (commandSender instanceof Player)
+        {
+            Player player = (Player) commandSender;
+            if (!player.hasPermission("pts.ptsloadplayer"))
+            {
+                return false;
+            }
+        }
         if (args.length == 1)
         {
-            if (commandSender instanceof Player)
+            for (Player p : getServer().getOnlinePlayers())
             {
-                Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptsloadplayer"))
-                {
-                    return false;
-                }
-            }
-            for(Player p : getServer().getOnlinePlayers())
-            {
-                if(p.getName().equals(args[0]))
+                if (p.getName().equals(args[0]))
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                            PlayertoSql.getInstance().getPlayerManager().onPlayerJoin (p));
+                            PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p));
                     return true;
                 }
             }
         }
+        else if (args.length == 2)
+        {
+            if (args[1].equalsIgnoreCase("sync"))
+            {
+                for (Player p : getServer().getOnlinePlayers())
+                {
+                    if (p.getName().equals(args[0]))
+                    {
+                        PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
         return false;
     }
 }
