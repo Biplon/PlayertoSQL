@@ -13,7 +13,7 @@ public class Playermanagement
         instance = this;
     }
 
-    public Playermanagement getInstance()
+    public static Playermanagement getInstance()
     {
         return instance;
     }
