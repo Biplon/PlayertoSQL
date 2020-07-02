@@ -1,14 +1,11 @@
 package main.java;
 
 import main.java.api.Playermanagement;
-import main.java.command.CommandAddDisablePlayerSaves;
-import main.java.command.CommandRemoveDisablePlayerSaves;
-import main.java.command.CommandSavePlayer;
+import main.java.command.*;
 import main.java.database.DatabaseManager;
 import main.java.event.PlayerJoin;
 import main.java.event.PlayerQuit;
 import main.java.player.AutosaveManager;
-import main.java.command.CommandClearPlayerFiles;
 import main.java.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -47,6 +44,9 @@ public class PlayertoSql extends JavaPlugin
 
     private void regCommands()
     {
+        this.getCommand("ptsloadplayer").setExecutor(new CommandLoadPlayer());
+        this.getCommand("ptsdipllo").setExecutor(new CommandAddDisablePlayerLoad());
+        this.getCommand("ptsenpllo").setExecutor(new CommandRemoveDisablePlayerLoad());
         this.getCommand("ptsclear").setExecutor(new CommandClearPlayerFiles());
         this.getCommand("ptsdiplsa").setExecutor(new CommandAddDisablePlayerSaves());
         this.getCommand("ptsenplsa").setExecutor(new CommandRemoveDisablePlayerSaves());

@@ -25,7 +25,6 @@ public class CommandSavePlayer implements CommandExecutor
         }
         if (args.length == 1)
         {
-
             for (Player p : getServer().getOnlinePlayers())
             {
                 if (p.getName().equals(args[0]))
@@ -35,7 +34,6 @@ public class CommandSavePlayer implements CommandExecutor
                     return true;
                 }
             }
-
         }
         else if (args.length == 2)
         {

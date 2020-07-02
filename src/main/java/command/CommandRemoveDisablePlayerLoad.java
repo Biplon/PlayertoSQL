@@ -19,7 +19,7 @@ public class CommandRemoveDisablePlayerLoad implements CommandExecutor
             if (commandSender instanceof Player)
             {
                 Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptsloadplayer"))
+                if (!player.hasPermission("pts.ptsenpllo"))
                 {
                     return false;
                 }

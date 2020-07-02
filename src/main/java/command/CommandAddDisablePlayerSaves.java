@@ -19,7 +19,7 @@ public class CommandAddDisablePlayerSaves implements CommandExecutor
             if (commandSender instanceof Player)
             {
                 Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptsenplsa"))
+                if (!player.hasPermission("pts.ptsdiplsa"))
                 {
                     return false;
                 }
