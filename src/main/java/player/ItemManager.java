@@ -18,6 +18,7 @@ public class ItemManager
             {
                 try
                 {
+                    item[i].getItemMeta().getLocalizedName();
                     values[i] = StreamSerializer.getDefault().serializeItemStack(item[i]);
                 }
                 catch (IOException e)

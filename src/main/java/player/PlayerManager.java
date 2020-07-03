@@ -50,10 +50,9 @@ public class PlayerManager
 
     public void onPlayerQuit(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
-        if (!disabledplayersaves.contains(uuid))
-        {
-            savePlayer(uuid, inventory, armor, offhand, enderchest);
-        }
+
+        savePlayer(uuid, inventory, armor, offhand, enderchest);
+
         if(ConfigManager.getConfigvalueBool("general.playerfile"))
         {
             savePlayerfile(uuid, inventory, armor, offhand, enderchest);
@@ -156,17 +155,20 @@ public class PlayerManager
 
     public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
     {
-        if (!DatabaseManager.getInstance().savePlayerInventoryData(uuid, inventory))
+        if (!disabledplayersaves.contains(uuid))
         {
-            unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
-        }
-        if (!DatabaseManager.getInstance().savePlayerArmor(uuid, armor, offhand))
-        {
-            unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
-        }
-        if (!DatabaseManager.getInstance().savePlayerEnderchestData(uuid, enderchest))
-        {
-            unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
+            if (!DatabaseManager.getInstance().savePlayerInventoryData(uuid, inventory))
+            {
+                unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
+            }
+            if (!DatabaseManager.getInstance().savePlayerArmor(uuid, armor, offhand))
+            {
+                unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
+            }
+            if (!DatabaseManager.getInstance().savePlayerEnderchestData(uuid, enderchest))
+            {
+                unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
+            }
         }
     }
 
