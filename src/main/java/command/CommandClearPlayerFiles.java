@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 public class CommandClearPlayerFiles implements CommandExecutor
 {
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
     {

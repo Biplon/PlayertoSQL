@@ -32,7 +32,7 @@ public class AutosaveManager
             {
                 if (p.isOnline())
                 {
-                    pm.savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+                    pm.savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
                 }
             }
             onlinePlayers.clear();
@@ -48,7 +48,7 @@ public class AutosaveManager
         {
             if (p.isOnline())
             {
-                pm.savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+                pm.savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
             }
         }
     }

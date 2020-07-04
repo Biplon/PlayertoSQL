@@ -11,7 +11,6 @@ import static org.bukkit.Bukkit.getServer;
 
 public class CommandLoadPlayer implements CommandExecutor
 {
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
@@ -30,7 +29,7 @@ public class CommandLoadPlayer implements CommandExecutor
                 if (p.getName().equals(args[0]))
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                            PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p));
+                            PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,false));
                     return true;
                 }
             }
@@ -43,15 +42,13 @@ public class CommandLoadPlayer implements CommandExecutor
                 {
                     if (p.getName().equals(args[0]))
                     {
-                        PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
+                        PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,false);
                         return true;
                     }
                 }
             }
             return false;
         }
-
-
         return false;
     }
 }

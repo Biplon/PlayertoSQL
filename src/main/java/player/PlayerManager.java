@@ -36,32 +36,17 @@ public class PlayerManager
     {
         if (DatabaseManager.getInstance().isPlayerexist(p.getUniqueId().toString()))
         {
-            if (!disabledplayerload.contains(p.getUniqueId().toString()))
-            {
-                loadPlayer(p);
-            }
+            loadPlayer(p,false);
         }
         else
         {
             DatabaseManager.getInstance().createPlayer(p);
-            savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
-        }
-    }
-
-    public void onPlayerQuit(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
-    {
-
-        savePlayer(uuid, inventory, armor, offhand, enderchest);
-
-        if(ConfigManager.getConfigvalueBool("general.playerfile"))
-        {
-            savePlayerfile(uuid, inventory, armor, offhand, enderchest);
         }
     }
 
     public void clearPlayerfile()
     {
-        File folder = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/");
+        File folder = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/");
         try
         {
             FileUtils.cleanDirectory(folder);
@@ -96,20 +81,20 @@ public class PlayerManager
     {
         try
         {
-            File save_file = new File(PlayertoSql.getInstance().getDataFolder()+"/ptssaves/"+ uuid +".txt");
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/" + uuid + ".txt");
             if (!save_file.exists())
             {
                 save_file.getParentFile().mkdirs();
                 save_file.createNewFile();
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
-            bw.write("=======["+sdf.format(time)+"]=======");
+            bw.write("=======[" + sdf.format(time) + "]=======");
             bw.newLine();
             bw.write("[inventory]");
             bw.newLine();
-            for (ItemStack item: inventory)
+            for (ItemStack item : inventory)
             {
-                if (item !=null)
+                if (item != null)
                 {
                     bw.write(item.toString());
                     bw.newLine();
@@ -117,9 +102,9 @@ public class PlayerManager
             }
             bw.write("[armor]");
             bw.newLine();
-            for (ItemStack item: armor)
+            for (ItemStack item : armor)
             {
-                if (item !=null)
+                if (item != null)
                 {
                     bw.write(item.toString());
                     bw.newLine();
@@ -127,9 +112,9 @@ public class PlayerManager
             }
             bw.write("[offhand]");
             bw.newLine();
-            for (ItemStack item: offhand)
+            for (ItemStack item : offhand)
             {
-                if (item !=null)
+                if (item != null)
                 {
                     bw.write(item.toString());
                     bw.newLine();
@@ -137,9 +122,9 @@ public class PlayerManager
             }
             bw.write("[enderchest]");
             bw.newLine();
-            for (ItemStack item: enderchest)
+            for (ItemStack item : enderchest)
             {
-                if (item !=null)
+                if (item != null)
                 {
                     bw.write(item.toString());
                     bw.newLine();
@@ -153,9 +138,9 @@ public class PlayerManager
         }
     }
 
-    public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
+    public void savePlayer(String uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList)
     {
-        if (!disabledplayersaves.contains(uuid))
+        if (!disabledplayersaves.contains(uuid) || ignoreList)
         {
             if (!DatabaseManager.getInstance().savePlayerInventoryData(uuid, inventory))
             {
@@ -169,6 +154,10 @@ public class PlayerManager
             {
                 unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
             }
+        }
+        if (ConfigManager.getConfigvalueBool("general.playerfile"))
+        {
+            savePlayerfile(uuid, inventory, armor, offhand, enderchest);
         }
     }
 
@@ -208,7 +197,6 @@ public class PlayerManager
                     unsavedPlayerArmor.set(i, null);
                 }
             }
-
         }
         for (int i = 0; i < unsavedPlayerEnderchest.size(); i++)
         {
@@ -325,128 +313,126 @@ public class PlayerManager
         }
     }
 
-    public void loadPlayer(Player p)
+    public void loadPlayer(Player p,boolean ignoreList)
     {
-        DatabaseManager.getInstance().updatePlayerData(p);
-        ResultSet rs;
-        String[] values;
-
-        if (isPlayerSaved(p.getUniqueId().toString(), "inventory"))
+        if (!disabledplayerload.contains(p.getUniqueId().toString()) || ignoreList )
         {
-            try
-            {
+            DatabaseManager.getInstance().updatePlayerData(p);
+            ResultSet rs;
+            String[] values;
 
-                rs = DatabaseManager.getInstance().loadPlayerInventoryData(p.getUniqueId().toString());
-                values = new String[DatabaseManager.inventorylenght];
-                rs.next();
-                for (int i = 0; i < DatabaseManager.inventorylenght; i++)
+            if (isPlayerSaved(p.getUniqueId().toString(), "inventory"))
+            {
+                try
                 {
-                    if (i < 10)
+                    rs = DatabaseManager.getInstance().loadPlayerInventoryData(p.getUniqueId().toString());
+                    values = new String[DatabaseManager.inventoryLength];
+                    rs.next();
+                    for (int i = 0; i < DatabaseManager.inventoryLength; i++)
                     {
-                        values[i] = rs.getNString("slot_0" + i + "_id");
+                        if (i < 10)
+                        {
+                            values[i] = rs.getNString("slot_0" + i + "_id");
+                        }
+                        else
+                        {
+                            values[i] = rs.getNString("slot_" + i + "_id");
+                        }
+
+                        p.getInventory().setContents(ItemManager.setItemstackData(values));
                     }
-                    else
+                    rs.close();
+                }
+                catch (SQLException ex)
+                {
+                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                }
+            }
+            else
+            {
+                for (PTSPlayerInventory value : unsavedPlayerInventory)
+                {
+                    if (value.getUuid().equals(p.getUniqueId().toString()))
                     {
-                        values[i] = rs.getNString("slot_" + i + "_id");
+                        p.getInventory().setContents(value.getInventory());
+                        removeUnsavedPlayer(p.getUniqueId().toString(), "inventory");
                     }
-
-                    p.getInventory().setContents(ItemManager.setItemstackData(values));
-                }
-                rs.close();
-            }
-            catch (SQLException ex)
-            {
-                PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
-            }
-        }
-        else
-        {
-            for (PTSPlayerInventory value : unsavedPlayerInventory)
-            {
-                if (value.getUuid().equals(p.getUniqueId().toString()))
-                {
-                    p.getInventory().setContents(value.getInventory());
-                    removeUnsavedPlayer(p.getUniqueId().toString(), "inventory");
                 }
             }
-
-        }
-        if (isPlayerSaved(p.getUniqueId().toString(), "enderchest"))
-        {
-            try
+            if (isPlayerSaved(p.getUniqueId().toString(), "enderchest"))
             {
-                rs = DatabaseManager.getInstance().loadPlayerEnderchestData(p.getUniqueId().toString());
-                rs.next();
-                values = new String[DatabaseManager.enderchestlenght];
-                for (int i = 0; i < DatabaseManager.enderchestlenght; i++)
+                try
                 {
-
-                    if (i < 10)
+                    rs = DatabaseManager.getInstance().loadPlayerEnderchestData(p.getUniqueId().toString());
+                    rs.next();
+                    values = new String[DatabaseManager.enderChestLength];
+                    for (int i = 0; i < DatabaseManager.enderChestLength; i++)
                     {
-                        values[i] = rs.getNString("slot_0" + i + "_id");
+
+                        if (i < 10)
+                        {
+                            values[i] = rs.getNString("slot_0" + i + "_id");
+                        }
+                        else
+                        {
+                            values[i] = rs.getNString("slot_" + i + "_id");
+                        }
+
+                        p.getEnderChest().setContents(ItemManager.setItemstackData(values));
                     }
-                    else
+                    rs.close();
+                }
+                catch (SQLException ex)
+                {
+                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                }
+            }
+            else
+            {
+                for (PTSPlayerEnderchest value : unsavedPlayerEnderchest)
+                {
+                    if (value.getUuid().equals(p.getUniqueId().toString()))
                     {
-                        values[i] = rs.getNString("slot_" + i + "_id");
+                        p.getEnderChest().setContents(value.getInventoryEnderchest());
+                        removeUnsavedPlayer(p.getUniqueId().toString(), "enderchest");
                     }
-
-                    p.getEnderChest().setContents(ItemManager.setItemstackData(values));
                 }
-                rs.close();
             }
-            catch (SQLException ex)
+            if (isPlayerSaved(p.getUniqueId().toString(), "armor"))
             {
-                PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
-            }
-
-        }
-        else
-        {
-            for (PTSPlayerEnderchest value : unsavedPlayerEnderchest)
-            {
-                if (value.getUuid().equals(p.getUniqueId().toString()))
+                try
                 {
-                    p.getEnderChest().setContents(value.getInventoryEnderchest());
-                    removeUnsavedPlayer(p.getUniqueId().toString(), "enderchest");
+                    rs = DatabaseManager.getInstance().loadPlayerArmor(p.getUniqueId().toString());
+                    rs.next();
+                    values = new String[4];
+                    String[] values2 = new String[1];
+                    values[0] = rs.getNString("slot_00_id");
+                    values[1] = rs.getNString("slot_01_id");
+                    values[2] = rs.getNString("slot_02_id");
+                    values[3] = rs.getNString("slot_03_id");
+                    values2[0] = rs.getNString("slot_04_id");
+
+                    p.getInventory().setArmorContents(ItemManager.setItemstackData(values));
+                    p.getInventory().setExtraContents(ItemManager.setItemstackData(values2));
+                    rs.close();
                 }
-            }
-        }
-        if (isPlayerSaved(p.getUniqueId().toString(), "armor"))
-        {
-            try
-            {
-                rs = DatabaseManager.getInstance().loadPlayerArmor(p.getUniqueId().toString());
-                rs.next();
-                values = new String[4];
-                String[] values2 = new String[1];
-                values[0] = rs.getNString("slot_00_id");
-                values[1] = rs.getNString("slot_01_id");
-                values[2] = rs.getNString("slot_02_id");
-                values[3] = rs.getNString("slot_03_id");
-                values2[0] = rs.getNString("slot_04_id");
-
-                p.getInventory().setArmorContents(ItemManager.setItemstackData(values));
-                p.getInventory().setExtraContents(ItemManager.setItemstackData(values2));
-                rs.close();
-            }
-            catch (SQLException ex)
-            {
-                PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
-            }
-
-        }
-        else
-        {
-            for (PTSPlayerArmor value : unsavedPlayerArmor)
-            {
-                if (value.getUuid().equals(p.getUniqueId().toString()))
+                catch (SQLException ex)
                 {
-                    p.getInventory().setArmorContents(value.getInventoryArmor());
-                    p.getInventory().setExtraContents(value.getInventoryOffhand());
-                    removeUnsavedPlayer(p.getUniqueId().toString(), "armor");
+                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                }
+            }
+            else
+            {
+                for (PTSPlayerArmor value : unsavedPlayerArmor)
+                {
+                    if (value.getUuid().equals(p.getUniqueId().toString()))
+                    {
+                        p.getInventory().setArmorContents(value.getInventoryArmor());
+                        p.getInventory().setExtraContents(value.getInventoryOffhand());
+                        removeUnsavedPlayer(p.getUniqueId().toString(), "armor");
+                    }
                 }
             }
         }
-
     }
 }

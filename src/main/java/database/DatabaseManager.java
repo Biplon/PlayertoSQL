@@ -26,12 +26,12 @@ public class DatabaseManager
     static StringBuilder inventoryslotsforquery = new StringBuilder();
     static StringBuilder enderinventoryslotsforquery = new StringBuilder();
 
-    static String updateinventoryStatment = "";
-    static String updatearmorStatment = "";
-    static String updateenderchestStatment = "";
+    static String updateInventoryStatement = "";
+    static String updateArmorStatement = "";
+    static String updateEnderChestStatement = "";
 
-    public static byte inventorylenght = 36;
-    public static byte enderchestlenght = 27;
+    public static byte inventoryLength = 36;
+    public static byte enderChestLength = 27;
 
     public DatabaseManager()
     {
@@ -39,11 +39,11 @@ public class DatabaseManager
         try
         {
             loadConfigValues();
-            createStatmentStrings();
+            createStatementStrings();
             PlayertoSql.getInstance().getLogger().info("Connecting to a selected database...");
             createConnection(false);
             PlayertoSql.getInstance().getLogger().info("Connected database successfully...");
-            createSlotqueryString();
+            createSlotQueryString();
             setupTables();
         }
         catch (SQLException ex)
@@ -57,24 +57,24 @@ public class DatabaseManager
         return instance;
     }
 
-    private void createStatmentStrings()
+    private void createStatementStrings()
     {
-        updateinventoryStatment = "Update " + dbname + "." + playerinventorytablename + " SET ";
-        for (int i = 0; i < inventorylenght; i++)
+        updateInventoryStatement = "Update " + dbname + "." + playerinventorytablename + " SET ";
+        for (int i = 0; i < inventoryLength; i++)
         {
             if (i < 10)
             {
-                updateinventoryStatment += "slot_0" + i + "_id= ?,";
+                updateInventoryStatement += "slot_0" + i + "_id= ?,";
             }
             else
             {
-                updateinventoryStatment += "slot_" + i + "_id= ?,";
+                updateInventoryStatement += "slot_" + i + "_id= ?,";
             }
         }
-        updateinventoryStatment = updateinventoryStatment.substring(0, updateinventoryStatment.length() - 1);
-        updateinventoryStatment += " where uuid_player= ?;";
+        updateInventoryStatement = updateInventoryStatement.substring(0, updateInventoryStatement.length() - 1);
+        updateInventoryStatement += " where uuid_player= ?;";
 
-        updatearmorStatment = "Update " + dbname + "." + playerintentoryarmortablename + " SET " +
+        updateArmorStatement = "Update " + dbname + "." + playerintentoryarmortablename + " SET " +
                 "slot_00_id= ?," +
                 "slot_01_id= ?," +
                 "slot_02_id= ?," +
@@ -82,26 +82,25 @@ public class DatabaseManager
                 "slot_04_id= ?" +
                 " where uuid_player= ?;";
 
-
-        updateenderchestStatment = "Update " + dbname + "." + playerenderchesttablename + " SET ";
-        for (int i = 0; i < enderchestlenght; i++)
+        updateEnderChestStatement = "Update " + dbname + "." + playerenderchesttablename + " SET ";
+        for (int i = 0; i < enderChestLength; i++)
         {
             if (i < 10)
             {
-                updateenderchestStatment += "slot_0" + i + "_id= ?,";
+                updateEnderChestStatement += "slot_0" + i + "_id= ?,";
             }
             else
             {
-                updateenderchestStatment += "slot_" + i + "_id= ?,";
+                updateEnderChestStatement += "slot_" + i + "_id= ?,";
             }
         }
-        updateenderchestStatment = updateenderchestStatment.substring(0, updateenderchestStatment.length() - 1);
-        updateenderchestStatment += " where uuid_player= ?;";
+        updateEnderChestStatement = updateEnderChestStatement.substring(0, updateEnderChestStatement.length() - 1);
+        updateEnderChestStatement += " where uuid_player= ?;";
     }
 
-    private void createSlotqueryString()
+    private void createSlotQueryString()
     {
-        for (int i = 0; i < inventorylenght; i++)
+        for (int i = 0; i < inventoryLength; i++)
         {
             if (i < 10)
             {
@@ -113,7 +112,7 @@ public class DatabaseManager
             }
         }
 
-        for (int i = 0; i < enderchestlenght; i++)
+        for (int i = 0; i < enderChestLength; i++)
         {
             if (i < 10)
             {
@@ -175,7 +174,6 @@ public class DatabaseManager
             PreparedStatement query = null;
             try
             {
-
                 data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playertablename + "" +
                         " (`uuid_player` CHAR(128) NOT NULL," +
                         "`name` CHAR(128) NOT NULL," +
@@ -315,12 +313,11 @@ public class DatabaseManager
     {
         if (connection != null)
         {
-
             try
             {
                 String[] tmp = ItemManager.getItemstackData(items);
-                PreparedStatement query = connection.prepareStatement(updateinventoryStatment);
-                for (int i = 1; i <= inventorylenght; i++)
+                PreparedStatement query = connection.prepareStatement(updateInventoryStatement);
+                for (int i = 1; i <= inventoryLength; i++)
                 {
                     query.setString(i, tmp[i - 1]);
                 }
@@ -336,8 +333,6 @@ public class DatabaseManager
                 return false;
             }
         }
-
-
         return false;
     }
 
@@ -348,8 +343,8 @@ public class DatabaseManager
             try
             {
                 String[] tmp = ItemManager.getItemstackData(items);
-                PreparedStatement query = connection.prepareStatement(updateenderchestStatment);
-                for (int i = 1; i <= enderchestlenght; i++)
+                PreparedStatement query = connection.prepareStatement(updateEnderChestStatement);
+                for (int i = 1; i <= enderChestLength; i++)
                 {
                     query.setString(i, tmp[i - 1]);
                 }
@@ -375,7 +370,7 @@ public class DatabaseManager
             try
             {
                 String[] tmp = ItemManager.getItemstackData(itemsarmor);
-                PreparedStatement query = connection.prepareStatement(updatearmorStatment);
+                PreparedStatement query = connection.prepareStatement(updateArmorStatement);
 
                 query.setString(1, tmp[0]);
                 query.setString(2, tmp[1]);
@@ -391,7 +386,7 @@ public class DatabaseManager
             {
                 e.printStackTrace();
                 PlayertoSql.getInstance().getLogger().severe("Error load player inventory! Error: " + e.getMessage());
-                PlayertoSql.getInstance().getLogger().severe(updatearmorStatment);
+                PlayertoSql.getInstance().getLogger().severe(updateArmorStatement);
                 return false;
             }
         }

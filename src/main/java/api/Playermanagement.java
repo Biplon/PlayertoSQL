@@ -22,7 +22,7 @@ public class Playermanagement
     {
         if (!PlayertoSql.getInstance().getPlayerManager().disabledplayersaves.contains(p.getUniqueId().toString()))
         {
-            PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+            PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
             return true;
         }
         return false;
@@ -30,7 +30,7 @@ public class Playermanagement
 
     public boolean savePlayerIgnoreDisableSync(Player p)
     {
-        PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents());
+        PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true);
         return true;
     }
 
@@ -39,7 +39,7 @@ public class Playermanagement
         if (!PlayertoSql.getInstance().getPlayerManager().disabledplayersaves.contains(p.getUniqueId().toString()))
         {
             Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents()));
+                    PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false));
             return true;
         }
         return false;
@@ -48,7 +48,7 @@ public class Playermanagement
     public boolean savePlayerIgnoreDisableAsync(Player p)
     {
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents()));
+                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true));
         return true;
     }
 
@@ -68,7 +68,7 @@ public class Playermanagement
     {
         if (!PlayertoSql.getInstance().getPlayerManager().disabledplayerload.contains(p.getUniqueId().toString()))
         {
-            PlayertoSql.getInstance().getPlayerManager().loadPlayer(p);
+            PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,false);
             return true;
         }
         return false;
@@ -76,25 +76,21 @@ public class Playermanagement
 
     public boolean loadPlayerIgnoreDisableSync(Player p)
     {
-        PlayertoSql.getInstance().getPlayerManager().loadPlayer(p);
+        PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,true);
         return true;
     }
 
     public boolean loadPlayerAsync(Player p)
     {
-        if (!PlayertoSql.getInstance().getPlayerManager().disabledplayerload.contains(p.getUniqueId().toString()))
-        {
-            Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    PlayertoSql.getInstance().getPlayerManager().loadPlayer(p));
-            return true;
-        }
-        return false;
+        Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
+                PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,false));
+        return true;
     }
 
     public boolean loadPlayerIgnoreDisableAsync(Player p)
     {
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                PlayertoSql.getInstance().getPlayerManager().loadPlayer(p));
+                PlayertoSql.getInstance().getPlayerManager().loadPlayer(p,true));
         return true;
     }
 

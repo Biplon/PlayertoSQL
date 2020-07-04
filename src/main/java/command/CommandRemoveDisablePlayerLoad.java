@@ -10,7 +10,6 @@ import static org.bukkit.Bukkit.getServer;
 
 public class CommandRemoveDisablePlayerLoad implements CommandExecutor
 {
-
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
@@ -32,7 +31,6 @@ public class CommandRemoveDisablePlayerLoad implements CommandExecutor
                     return true;
                 }
             }
-
         }
         return false;
     }

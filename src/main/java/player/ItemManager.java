@@ -1,6 +1,5 @@
 package main.java.player;
 
-
 import com.comphenix.protocol.utility.StreamSerializer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
