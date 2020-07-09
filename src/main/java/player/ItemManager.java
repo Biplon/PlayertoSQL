@@ -5,10 +5,12 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.*;
+import java.util.Objects;
 
 public class ItemManager
 {
-    public static String[] getItemstackData(ItemStack[] item)
+    //serializeItemStack itemStack and return string array with values
+    public static String[] getItemStackData(ItemStack[] item)
     {
         String[] values = new String[item.length];
         for (int i = 0; i < item.length; i++)
@@ -17,7 +19,7 @@ public class ItemManager
             {
                 try
                 {
-                    item[i].getItemMeta().getLocalizedName();
+                    Objects.requireNonNull(item[i].getItemMeta()).getLocalizedName();
                     values[i] = StreamSerializer.getDefault().serializeItemStack(item[i]);
                 }
                 catch (IOException e)
@@ -29,7 +31,8 @@ public class ItemManager
         return values;
     }
 
-    public static ItemStack[] setItemstackData(String[] string)
+    //deserializeItemStack string and return itemStack array with values
+    public static ItemStack[] setItemStackData(String[] string)
     {
         ItemStack[] itemStacks = new ItemStack[string.length];
         for (int i = 0; i < string.length; i++)

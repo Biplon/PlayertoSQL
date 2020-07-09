@@ -14,42 +14,34 @@ public class CommandSavePlayer implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
+        //check is player and have perms
         if (commandSender instanceof Player)
         {
             Player player = (Player) commandSender;
-            if (!player.hasPermission("pts.ptssaveplayer"))
+            if (!player.hasPermission("pts.ptsadmin"))
             {
                 return false;
             }
         }
-        if (args.length == 1)
+        //search for player
+        for (Player p : getServer().getOnlinePlayers())
         {
-            for (Player p : getServer().getOnlinePlayers())
+            if (p.getName().equals(args[0]))
             {
-                if (p.getName().equals(args[0]))
+                //1 args save player async
+                if (args.length == 1)
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
-                    });
+                            PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false));
+                    return true;
+                }
+                //2 args save player sync 1 tick delay
+                else if (args.length == 2)
+                {
+                    Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), () -> PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false));
                     return true;
                 }
             }
-        }
-        else if (args.length == 2)
-        {
-            if (args[1].equalsIgnoreCase("sync"))
-            {
-                for (Player p : getServer().getOnlinePlayers())
-                {
-                    if (p.getName().equals(args[0]))
-                    {
-                        PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId().toString(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
         return false;
     }

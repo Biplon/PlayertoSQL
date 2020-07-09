@@ -2,23 +2,26 @@ package main.java.struct;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
+// object to store enderchest items if player could not save
 public class PTSPlayerEnderchest
 {
-    private final String uuid;
-    private final ItemStack[] inventoryEnderchest;
+    private final UUID uuid;
+    private final ItemStack[] inventoryEnderChest;
 
-    public PTSPlayerEnderchest(String uuid, ItemStack[] inventoryEnderchest)
+    public PTSPlayerEnderchest(UUID uuid, ItemStack[] inventoryEnderchest)
     {
         this.uuid = uuid;
-        this.inventoryEnderchest = inventoryEnderchest;
+        this.inventoryEnderChest = inventoryEnderchest;
     }
 
-    public ItemStack[] getInventoryEnderchest()
+    public ItemStack[] getInventoryEnderChest()
     {
-        return inventoryEnderchest;
+        return inventoryEnderChest;
     }
 
-    public String getUuid()
+    public UUID getUuid()
     {
         return uuid;
     }

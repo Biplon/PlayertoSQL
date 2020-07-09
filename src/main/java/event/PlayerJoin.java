@@ -14,13 +14,8 @@ public class PlayerJoin implements Listener
     @EventHandler
     public void onLogin(final PlayerJoinEvent event)
     {
-        final Player p = event.getPlayer();
+        //on player join start async loading
         Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
-        {
-            if (p.isOnline())
-            {
-                PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(p);
-            }
-        }, ConfigManager.getConfigvalueInt("general.loaddelay"));
+                PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(event.getPlayer()), ConfigManager.joinLoadDelay);
     }
 }

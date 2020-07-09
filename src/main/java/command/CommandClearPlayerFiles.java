@@ -12,22 +12,17 @@ public class CommandClearPlayerFiles implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
     {
+        //check is player and have perms
         if (commandSender instanceof Player)
         {
             Player player = (Player) commandSender;
-            if (player.hasPermission("pts.clear"))
+            if (player.hasPermission("pts.ptsadmin"))
             {
-                Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () -> PlayertoSql.getInstance().getPlayerManager().clearPlayerfile(), 2L);
+                //start async task to clear playerLogFiles
+                Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () -> PlayertoSql.getInstance().getPlayerManager().clearPlayerFile(), 2L);
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }

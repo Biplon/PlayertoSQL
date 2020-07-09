@@ -2,12 +2,15 @@ package main.java.struct;
 
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
+// object to store inventory items if player could not save
 public class PTSPlayerInventory
 {
-    private final String uuid;
+    private final UUID uuid;
     private final ItemStack[] inventory;
 
-    public PTSPlayerInventory(String uuid, ItemStack[] inventory)
+    public PTSPlayerInventory(UUID uuid, ItemStack[] inventory)
     {
         this.uuid = uuid;
         this.inventory = inventory;
@@ -18,7 +21,7 @@ public class PTSPlayerInventory
         return inventory;
     }
 
-    public String getUuid()
+    public UUID getUuid()
     {
         return uuid;
     }

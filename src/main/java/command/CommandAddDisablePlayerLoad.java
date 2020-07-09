@@ -13,21 +13,24 @@ public class CommandAddDisablePlayerLoad implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
     {
+        //check is player and have perms
+        if (commandSender instanceof Player)
+        {
+            Player player = (Player) commandSender;
+            if (!player.hasPermission("pts.ptsadmin"))
+            {
+                return false;
+            }
+        }
         if (args.length == 1)
         {
-            if (commandSender instanceof Player)
-            {
-                Player player = (Player) commandSender;
-                if (!player.hasPermission("pts.ptsdipllo"))
-                {
-                    return false;
-                }
-            }
+            //search for player
             for (Player p : getServer().getOnlinePlayers())
             {
                 if (p.getName().equals(args[0]))
                 {
-                    PlayertoSql.getInstance().getPlayerManager().addDisablePlayerLoad(p.getUniqueId().toString());
+                    //add player to DisablePlayerLoad list
+                    PlayertoSql.getInstance().getPlayerManager().addDisablePlayerLoad(p.getUniqueId());
                     return true;
                 }
             }
