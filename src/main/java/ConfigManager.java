@@ -10,6 +10,8 @@ public class ConfigManager
 
     public static int autosaveInterval;
 
+    public static boolean playercreate;
+
     //load config file and get values for var. If file not exist create default
     protected static void loadConfig()
     {
@@ -37,6 +39,7 @@ public class ConfigManager
         joinLoadDelay = getConfigValueInt("general.loaddelay");
         playerFile = getConfigValueBool("general.playerfile");
         autosaveInterval = getConfigValueInt("general.autosaveinterval");
+        playercreate = getConfigValueBool("general.playercreate");
     }
 
     //try to get String value

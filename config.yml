@@ -30,4 +30,6 @@ general:
   loaddelay: 20
   #create a file for each player who exit der server and write there Inventory in it(true/false)
   playerfile: false
+  #create player by join
+  playercreate: true
 

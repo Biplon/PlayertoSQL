@@ -45,7 +45,10 @@ public class PlayerManager
             }
             else
             {
-                DatabaseManager.getInstance().createPlayer(p);
+                if (ConfigManager.playercreate)
+                {
+                    DatabaseManager.getInstance().createPlayer(p);
+                }
             }
         }
     }
@@ -153,24 +156,27 @@ public class PlayerManager
     //check if player not on disabledPlayerSaved list or the list is ignored then player load
     public void savePlayer(UUID uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList)
     {
-        if (!disabledPlayerSaved.contains(uuid) || ignoreList)
+        if (ConfigManager.playercreate || DatabaseManager.getInstance().isPlayerExist(uuid.toString()))
         {
-            if (DatabaseManager.getInstance().isPlayerInventoryDataNotSaved(uuid, inventory))
+            if (!disabledPlayerSaved.contains(uuid) || ignoreList)
             {
-                unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
+                if (DatabaseManager.getInstance().isPlayerInventoryDataNotSaved(uuid, inventory))
+                {
+                    unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
+                }
+                if (DatabaseManager.getInstance().isPlayerArmorNotSaved(uuid, armor, offhand))
+                {
+                    unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
+                }
+                if (DatabaseManager.getInstance().isPlayerEnderchestDataNotSaved(uuid, enderchest))
+                {
+                    unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
+                }
             }
-            if (DatabaseManager.getInstance().isPlayerArmorNotSaved(uuid, armor, offhand))
+            if (ConfigManager.playerFile)
             {
-                unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
+                savePlayerFile(uuid, inventory, armor, offhand, enderchest);
             }
-            if (DatabaseManager.getInstance().isPlayerEnderchestDataNotSaved(uuid, enderchest))
-            {
-                unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
-            }
-        }
-        if (ConfigManager.playerFile)
-        {
-            savePlayerFile(uuid, inventory, armor, offhand, enderchest);
         }
     }
 
