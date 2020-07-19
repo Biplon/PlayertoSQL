@@ -1,4 +1,4 @@
-package main.java.struct;
+package pts.java.struct;
 
 import org.bukkit.inventory.ItemStack;
 

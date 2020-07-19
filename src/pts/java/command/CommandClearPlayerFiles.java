@@ -1,6 +1,6 @@
-package main.java.command;
+package pts.java.command;
 
-import main.java.PlayertoSql;
+import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

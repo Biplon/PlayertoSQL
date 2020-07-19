@@ -1,6 +1,6 @@
-package main.java.command;
+package pts.java.command;
 
-import main.java.PlayertoSql;
+import pts.java.PlayertoSql;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class CommandAddDisablePlayerSaves implements CommandExecutor
+public class CommandRemoveDisablePlayerLoad implements CommandExecutor
 {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args)
@@ -29,8 +29,8 @@ public class CommandAddDisablePlayerSaves implements CommandExecutor
             {
                 if (p.getName().equals(args[0]))
                 {
-                    //add player to DisablePlayerSave list
-                    PlayertoSql.getInstance().getPlayerManager().addDisablePlayerSave(p.getUniqueId());
+                    //remove player to DisablePlayerLoad list
+                    PlayertoSql.getInstance().getPlayerManager().removeDisablePlayerLoad(p.getUniqueId());
                     return true;
                 }
             }
@@ -38,3 +38,5 @@ public class CommandAddDisablePlayerSaves implements CommandExecutor
         return false;
     }
 }
+
+

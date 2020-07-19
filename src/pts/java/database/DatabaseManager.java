@@ -1,8 +1,8 @@
-package main.java.database;
+package pts.java.database;
 
-import main.java.ConfigManager;
-import main.java.PlayertoSql;
-import main.java.player.ItemManager;
+import pts.java.ConfigManager;
+import pts.java.PlayertoSql;
+import pts.java.player.ItemManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

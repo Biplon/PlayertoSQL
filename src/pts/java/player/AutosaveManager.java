@@ -1,7 +1,7 @@
-package main.java.player;
+package pts.java.player;
 
-import main.java.ConfigManager;
-import main.java.PlayertoSql;
+import pts.java.ConfigManager;
+import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

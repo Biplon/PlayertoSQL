@@ -1,4 +1,4 @@
-package main.java.player;
+package pts.java.player;
 
 import com.comphenix.protocol.utility.StreamSerializer;
 import org.bukkit.Material;

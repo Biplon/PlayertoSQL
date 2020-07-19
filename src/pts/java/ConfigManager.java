@@ -1,4 +1,4 @@
-package main.java;
+package pts.java;
 
 import java.io.File;
 

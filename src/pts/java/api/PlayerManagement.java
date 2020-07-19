@@ -1,6 +1,6 @@
-package main.java.api;
+package pts.java.api;
 
-import main.java.PlayertoSql;
+import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

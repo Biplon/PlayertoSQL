@@ -1,12 +1,12 @@
-package main.java;
+package pts.java;
 
-import main.java.api.PlayerManagement;
-import main.java.command.*;
-import main.java.database.DatabaseManager;
-import main.java.event.PlayerJoin;
-import main.java.event.PlayerQuit;
-import main.java.player.AutosaveManager;
-import main.java.player.PlayerManager;
+import pts.java.api.PlayerManagement;
+import pts.java.command.*;
+import pts.java.database.DatabaseManager;
+import pts.java.event.PlayerJoin;
+import pts.java.event.PlayerQuit;
+import pts.java.player.AutosaveManager;
+import pts.java.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;

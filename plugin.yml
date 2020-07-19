@@ -1,9 +1,9 @@
 name: PlayertoSql
 author: Vestri
 description: Plugin Player to Sql
-version: 0.20
+version: 0.21
 api-version: 1.15
-main: main.java.PlayertoSql
+main: pts.java.PlayertoSql
 depend: [ProtocolLib]
 permissions:
   pts.ptsadmin:

@@ -1,11 +1,11 @@
-package main.java.player;
+package pts.java.player;
 
-import main.java.ConfigManager;
-import main.java.PlayertoSql;
-import main.java.database.DatabaseManager;
-import main.java.struct.PTSPlayerArmor;
-import main.java.struct.PTSPlayerEnderchest;
-import main.java.struct.PTSPlayerInventory;
+import pts.java.ConfigManager;
+import pts.java.PlayertoSql;
+import pts.java.database.DatabaseManager;
+import pts.java.struct.PTSPlayerArmor;
+import pts.java.struct.PTSPlayerEnderchest;
+import pts.java.struct.PTSPlayerInventory;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
