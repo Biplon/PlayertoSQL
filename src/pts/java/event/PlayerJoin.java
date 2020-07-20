@@ -15,8 +15,6 @@ public class PlayerJoin implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(final PlayerJoinEvent event)
     {
-        PlayertoSql.getInstance().getPlayerManager().disableDrop.add(event.getPlayer());
-
         //on player join start async loading
         Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), () ->
                 PlayertoSql.getInstance().getPlayerManager().onPlayerJoin(event.getPlayer()), ConfigManager.joinLoadDelay);
