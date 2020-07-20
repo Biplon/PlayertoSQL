@@ -153,11 +153,11 @@ public class DatabaseManager
         {
             if (i < 10)
             {
-                inventorySlotsForQuery.append("`slot_0").append(i).append("_id` BLOB NULL,");
+                inventorySlotsForQuery.append("`slot_0").append(i).append("_id` LONGTEXT NULL,");
             }
             else
             {
-                inventorySlotsForQuery.append("`slot_").append(i).append("_id` BLOB NULL,");
+                inventorySlotsForQuery.append("`slot_").append(i).append("_id` LONGTEXT NULL,");
             }
         }
         return inventorySlotsForQuery.toString();
@@ -171,11 +171,11 @@ public class DatabaseManager
         {
             if (i < 10)
             {
-                enderInventorySlotsForQuery.append("`slot_0").append(i).append("_id` BLOB NULL,");
+                enderInventorySlotsForQuery.append("`slot_0").append(i).append("_id` LONGTEXT NULL,");
             }
             else
             {
-                enderInventorySlotsForQuery.append("`slot_").append(i).append("_id` BLOB NULL,");
+                enderInventorySlotsForQuery.append("`slot_").append(i).append("_id` LONGTEXT NULL,");
             }
         }
         return enderInventorySlotsForQuery.toString();
@@ -211,11 +211,11 @@ public class DatabaseManager
 
                     data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playerInventoryArmorTableName + " " +
                             "(`uuid_player` CHAR(128) NOT NULL," +
-                            "`slot_00_id` BLOB NULL," +
-                            "`slot_01_id` BLOB NULL," +
-                            "`slot_02_id` BLOB NULL," +
-                            "`slot_03_id` BLOB NULL," +
-                            "`slot_04_id` BLOB NULL," + //offhand
+                            "`slot_00_id` LONGTEXT NULL," +
+                            "`slot_01_id` LONGTEXT NULL," +
+                            "`slot_02_id` LONGTEXT NULL," +
+                            "`slot_03_id` LONGTEXT NULL," +
+                            "`slot_04_id` LONGTEXT NULL," + //offhand
                             " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
 
                     query = connection.prepareStatement(data);
