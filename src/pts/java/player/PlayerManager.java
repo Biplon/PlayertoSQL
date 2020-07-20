@@ -30,6 +30,8 @@ public class PlayerManager
     public final ArrayList<UUID> disabledPlayerSaved = new ArrayList();
     public final ArrayList<UUID> disabledPlayerLoaded = new ArrayList();
 
+    public final ArrayList<Player> disableDrop = new ArrayList<>();
+
     //date time for logfiles
     Date time = new Date();
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
@@ -51,6 +53,7 @@ public class PlayerManager
                 }
             }
         }
+        disableDrop.remove(p);
     }
 
     //clear player log files
