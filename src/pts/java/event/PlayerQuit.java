@@ -1,5 +1,6 @@
 package pts.java.event;
 
+import org.bukkit.inventory.ItemStack;
 import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -15,7 +16,12 @@ public class PlayerQuit implements Listener
         //get player from quit event
         Player p = event.getPlayer();
         //start async player save
+        ItemStack[] inv = p.getInventory().getContents();
+        ItemStack[] inva =  p.getInventory().getArmorContents();
+        ItemStack[] invae = p.getInventory().getExtraContents();
+        ItemStack[] inven = p.getEnderChest().getContents();
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false));
+                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), inv,inva,invae ,inven ,false));
+        p.getInventory().clear();
     }
 }
