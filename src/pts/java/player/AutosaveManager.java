@@ -1,5 +1,6 @@
 package pts.java.player;
 
+import org.bukkit.inventory.ItemStack;
 import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
@@ -58,7 +59,11 @@ public class AutosaveManager
         {
             if (p.isOnline())
             {
-                pm.savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
+                ItemStack[] inv = p.getInventory().getStorageContents();
+                ItemStack[] inva =  p.getInventory().getArmorContents();
+                ItemStack[] invae = p.getInventory().getExtraContents();
+                ItemStack[] inven = p.getEnderChest().getContents();
+                pm.savePlayer(p.getUniqueId(), inv,inva,invae ,inven ,false);
             }
         }
     }

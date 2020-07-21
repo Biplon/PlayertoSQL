@@ -31,7 +31,6 @@ public class PlayerManager
     public final ArrayList<UUID> disabledPlayerLoaded = new ArrayList();
 
     //date time for logfiles
-    Date time = new Date();
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
 
     //if player join check exist he in the database. If not create entry
@@ -103,6 +102,7 @@ public class PlayerManager
                 save_file.createNewFile();
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
+            Date time = new Date();
             bw.write("=======[" + sdf.format(time) + "]=======");
             bw.newLine();
             bw.write("[inventory]");
@@ -207,7 +207,7 @@ public class PlayerManager
                             values[i] = rs.getNString("slot_" + i + "_id");
                         }
 
-                        p.getInventory().setContents(ItemManager.setItemStackData(values));
+                        p.getInventory().setStorageContents((ItemManager.setItemStackData(values)));
                     }
                     rs.close();
                 }

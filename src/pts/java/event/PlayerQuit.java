@@ -16,7 +16,7 @@ public class PlayerQuit implements Listener
         //get player from quit event
         Player p = event.getPlayer();
         //start async player save
-        ItemStack[] inv = p.getInventory().getContents();
+        ItemStack[] inv = p.getInventory().getStorageContents();
         ItemStack[] inva =  p.getInventory().getArmorContents();
         ItemStack[] invae = p.getInventory().getExtraContents();
         ItemStack[] inven = p.getEnderChest().getContents();
