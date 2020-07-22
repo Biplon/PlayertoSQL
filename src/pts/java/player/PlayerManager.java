@@ -1,5 +1,6 @@
 package pts.java.player;
 
+import org.bukkit.Bukkit;
 import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import pts.java.database.DatabaseManager;
@@ -210,10 +211,11 @@ public class PlayerManager
                         p.getInventory().setStorageContents((ItemManager.setItemStackData(values)));
                     }
                     rs.close();
+                    PlayertoSql.getInstance().getLogger().info("Inventory loaded for "+p.getName()+" !");
                 }
                 catch (SQLException ex)
                 {
-                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                    PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
             }
             else
@@ -247,12 +249,14 @@ public class PlayerManager
                         }
 
                         p.getEnderChest().setContents(ItemManager.setItemStackData(values));
+
                     }
                     rs.close();
+                    PlayertoSql.getInstance().getLogger().info("Enderchest loaded for "+ p.getName()+" !");
                 }
                 catch (SQLException ex)
                 {
-                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                    PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
             }
             else
@@ -283,10 +287,11 @@ public class PlayerManager
                     p.getInventory().setArmorContents(ItemManager.setItemStackData(values));
                     p.getInventory().setExtraContents(ItemManager.setItemStackData(values2));
                     rs.close();
+                    PlayertoSql.getInstance().getLogger().info("Armor and offhand loaded for "+p.getName()+" !");
                 }
                 catch (SQLException ex)
                 {
-                    PlayertoSql.getInstance().getLogger().severe(ex.getMessage());
+                    PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
             }
             else
@@ -301,6 +306,10 @@ public class PlayerManager
                     }
                 }
             }
+        }
+        else
+        {
+            PlayertoSql.getInstance().getLogger().info("Loading for "+ p.getName()+" is disabled!");
         }
     }
 

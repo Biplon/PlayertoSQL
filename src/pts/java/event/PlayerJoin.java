@@ -12,7 +12,7 @@ import pts.java.player.PlayerManager;
 
 public class PlayerJoin implements Listener
 {
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onLogin(final PlayerJoinEvent event)
     {
         //on player join start async loading
