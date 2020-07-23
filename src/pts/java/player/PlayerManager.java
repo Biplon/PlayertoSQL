@@ -163,7 +163,7 @@ public class PlayerManager
         }
     }
 
-    private void savePlayerFileLoad(Player p, ItemStack[] tmp, ItemStack[] tmp2)
+    private void savePlayerFileLoad(Player p, ItemStack[] tmp, ItemStack[] tmp2,String type)
     {
         UUID uuid = p.getUniqueId();
         try
@@ -176,7 +176,7 @@ public class PlayerManager
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
             Date time = new Date();
-            bw.write("=[load]======[" + sdf.format(time) + "]=======");
+            bw.write("=[load "+ type +"]======[" + sdf.format(time) + "]=======");
             bw.newLine();
             for (ItemStack item : tmp)
             {
@@ -265,7 +265,7 @@ public class PlayerManager
                     p.getInventory().setStorageContents(tmpinv);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpinv, null);
+                        savePlayerFileLoad(p, tmpinv, null,"inventory");
                     }
                     rs.close();
                 }
@@ -308,7 +308,7 @@ public class PlayerManager
                     p.getEnderChest().setContents(tmpend);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpend, null);
+                        savePlayerFileLoad(p, tmpend, null,"enderchest");
                     }
                     rs.close();
                 }
@@ -344,11 +344,11 @@ public class PlayerManager
 
                     ItemStack[] tmparmor = ItemManager.setItemStackData(values);
                     p.getInventory().setArmorContents(tmparmor);
-                    ItemStack[] tmpoff = ItemManager.setItemStackData(values);
+                    ItemStack[] tmpoff = ItemManager.setItemStackData(values2);
                     p.getInventory().setExtraContents(tmpoff);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmparmor, tmpoff);
+                        savePlayerFileLoad(p, tmparmor, tmpoff,"armor offhand");
                     }
                     rs.close();
                 }
