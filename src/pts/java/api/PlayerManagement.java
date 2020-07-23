@@ -24,7 +24,7 @@ public class PlayerManagement
     {
         if (!PlayertoSql.getInstance().getPlayerManager().disabledPlayerSaved.contains(p.getUniqueId()))
         {
-            Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), ()->  PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false));
+            Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), ()->  PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false,"api async"));
             return true;
         }
         return false;
@@ -33,7 +33,7 @@ public class PlayerManagement
     @SuppressWarnings("unused")
     public boolean savePlayerIgnoreDisableSync(Player p)
     {
-        Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), ()-> PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true));
+        Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), ()-> PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true,"api async"));
         return true;
     }
     //check if player is not on disabledPlayerSaved list
@@ -44,7 +44,7 @@ public class PlayerManagement
         if (!PlayertoSql.getInstance().getPlayerManager().disabledPlayerSaved.contains(p.getUniqueId()))
         {
             Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                    PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false));
+                    PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false,"api sync"));
             return true;
         }
         return false;
@@ -54,7 +54,7 @@ public class PlayerManagement
     public boolean savePlayerIgnoreDisableAsync(Player p)
     {
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true));
+                PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),true,"api sync"));
         return true;
     }
     //add player to DisablePlayerSave list

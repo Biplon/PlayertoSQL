@@ -3,6 +3,7 @@ package pts.java.player;
 import com.comphenix.protocol.utility.StreamSerializer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import pts.java.PlayertoSql;
 
 import java.io.*;
 import java.util.Objects;
@@ -22,9 +23,9 @@ public class ItemManager
                     Objects.requireNonNull(item[i].getItemMeta()).getLocalizedName();
                     values[i] = StreamSerializer.getDefault().serializeItemStack(item[i]);
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    e.printStackTrace();
+                    PlayertoSql.getInstance().getLogger().warning(e.getMessage());
                 }
             }
         }
@@ -43,9 +44,9 @@ public class ItemManager
                 {
                     itemStacks[i] = StreamSerializer.getDefault().deserializeItemStack(string[i]);
                 }
-                catch (IOException e)
+                catch (Exception e)
                 {
-                    e.printStackTrace();
+                    PlayertoSql.getInstance().getLogger().warning(e.getMessage());
                 }
             }
         }

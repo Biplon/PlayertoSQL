@@ -32,13 +32,13 @@ public class CommandSavePlayer implements CommandExecutor
                 if (args.length == 1)
                 {
                     Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                            PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false));
+                            PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false,"Command"));
                     return true;
                 }
                 //2 args save player sync 1 tick delay
                 else if (args.length == 2)
                 {
-                    Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), () -> PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false));
+                    Bukkit.getScheduler().runTask(PlayertoSql.getInstance(), () -> PlayertoSql.getInstance().getPlayerManager().savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(), false,"Command"));
                     return true;
                 }
             }

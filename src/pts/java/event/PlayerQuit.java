@@ -21,7 +21,7 @@ public class PlayerQuit implements Listener
         ItemStack[] invae = p.getInventory().getExtraContents();
         ItemStack[] inven = p.getEnderChest().getContents();
         Bukkit.getScheduler().runTaskAsynchronously(PlayertoSql.getInstance(), () ->
-                PlayertoSql.getInstance().getPlayerManager().savePlayer(p.getUniqueId(), inv,inva,invae ,inven ,false));
+                PlayertoSql.getInstance().getPlayerManager().savePlayer(p, inv,inva,invae ,inven ,false,"quitsave"));
         p.getInventory().clear();
     }
 }

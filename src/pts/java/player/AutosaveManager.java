@@ -41,7 +41,11 @@ public class AutosaveManager
             {
                 if (p.isOnline())
                 {
-                    pm.savePlayer(p.getUniqueId(), p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false);
+                    pm.savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false,"autosave");
+                }
+                else
+                {
+                    PlayertoSql.getInstance().getLogger().warning("Player not auto saved! Player is offline");
                 }
             }
         }
@@ -63,7 +67,11 @@ public class AutosaveManager
                 ItemStack[] inva =  p.getInventory().getArmorContents();
                 ItemStack[] invae = p.getInventory().getExtraContents();
                 ItemStack[] inven = p.getEnderChest().getContents();
-                pm.savePlayer(p.getUniqueId(), inv,inva,invae ,inven ,false);
+                pm.savePlayer(p, inv,inva,invae ,inven ,false,"autosaveSD");
+            }
+            else
+            {
+                PlayertoSql.getInstance().getLogger().warning("Player not auto saved! Player is offline");
             }
         }
     }

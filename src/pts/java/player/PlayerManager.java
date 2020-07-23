@@ -32,7 +32,7 @@ public class PlayerManager
     public final ArrayList<UUID> disabledPlayerLoaded = new ArrayList();
 
     //date time for logfiles
-    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm");
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 
     //if player join check exist he in the database. If not create entry
     public void onPlayerJoin(Player p)
@@ -49,7 +49,15 @@ public class PlayerManager
                 {
                     DatabaseManager.getInstance().createPlayer(p);
                 }
+                else
+                {
+                    PlayertoSql.getInstance().getLogger().info("Player not create! Create player disabled");
+                }
             }
+        }
+        else
+        {
+            PlayertoSql.getInstance().getLogger().warning("Player not create/load! Player is offline");
         }
     }
 
@@ -92,11 +100,12 @@ public class PlayerManager
     }
 
     //write player savefile if enabled
-    private void savePlayerFile(UUID uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest)
+    private void savePlayerFile(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest,String savetyp)
     {
+        UUID uuid = p.getUniqueId();
         try
         {
-            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/" + uuid.toString() + ".txt");
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/"+ p.getName() + "-" + uuid.toString() + ".txt");
             if (!save_file.exists())
             {
                 save_file.getParentFile().mkdirs();
@@ -104,7 +113,7 @@ public class PlayerManager
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
             Date time = new Date();
-            bw.write("=======[" + sdf.format(time) + "]=======");
+            bw.write("=["+ savetyp +"]======[" + sdf.format(time) + "]=======");
             bw.newLine();
             bw.write("[inventory]");
             bw.newLine();
@@ -154,9 +163,53 @@ public class PlayerManager
         }
     }
 
-    //check if player not on disabledPlayerSaved list or the list is ignored then player load
-    public void savePlayer(UUID uuid, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList)
+    private void savePlayerFileLoad(Player p, ItemStack[] tmp, ItemStack[] tmp2)
     {
+        UUID uuid = p.getUniqueId();
+        try
+        {
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptsload/"+ p.getName() + "-" + uuid.toString() + ".txt");
+            if (!save_file.exists())
+            {
+                save_file.getParentFile().mkdirs();
+                save_file.createNewFile();
+            }
+            BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
+            Date time = new Date();
+            bw.write("=[load]======[" + sdf.format(time) + "]=======");
+            bw.newLine();
+            for (ItemStack item : tmp)
+            {
+                if (item != null)
+                {
+                    bw.write(item.toString());
+                    bw.newLine();
+                }
+            }
+            bw.newLine();
+            if (tmp2 != null)
+            {
+                for (ItemStack item : tmp2)
+                {
+                    if (item != null)
+                    {
+                        bw.write(item.toString());
+                        bw.newLine();
+                    }
+                }
+            }
+            bw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    //check if player not on disabledPlayerSaved list or the list is ignored then player load
+    public void savePlayer(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList,String savetyp)
+    {
+        UUID uuid = p.getUniqueId();
         if (ConfigManager.playercreate || DatabaseManager.getInstance().isPlayerExist(uuid.toString()))
         {
             if (!disabledPlayerSaved.contains(uuid) || ignoreList)
@@ -176,7 +229,7 @@ public class PlayerManager
             }
             if (ConfigManager.playerFile)
             {
-                savePlayerFile(uuid, inventory, armor, offhand, enderchest);
+                savePlayerFile(p, inventory, armor, offhand, enderchest,savetyp);
             }
         }
     }
@@ -207,13 +260,16 @@ public class PlayerManager
                         {
                             values[i] = rs.getNString("slot_" + i + "_id");
                         }
-
-                        p.getInventory().setStorageContents((ItemManager.setItemStackData(values)));
+                    }
+                    ItemStack[] tmpinv = ItemManager.setItemStackData(values);
+                    p.getInventory().setStorageContents(tmpinv);
+                    if (ConfigManager.playerFile)
+                    {
+                        savePlayerFileLoad(p, tmpinv, null);
                     }
                     rs.close();
-                    PlayertoSql.getInstance().getLogger().info("Inventory loaded for "+p.getName()+" !");
                 }
-                catch (SQLException ex)
+                catch (Exception ex)
                 {
                     PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
@@ -247,14 +303,16 @@ public class PlayerManager
                         {
                             values[i] = rs.getNString("slot_" + i + "_id");
                         }
-
-                        p.getEnderChest().setContents(ItemManager.setItemStackData(values));
-
+                    }
+                    ItemStack[] tmpend = ItemManager.setItemStackData(values);
+                    p.getEnderChest().setContents(tmpend);
+                    if (ConfigManager.playerFile)
+                    {
+                        savePlayerFileLoad(p, tmpend, null);
                     }
                     rs.close();
-                    PlayertoSql.getInstance().getLogger().info("Enderchest loaded for "+ p.getName()+" !");
                 }
-                catch (SQLException ex)
+                catch (Exception ex)
                 {
                     PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
@@ -284,12 +342,17 @@ public class PlayerManager
                     values[3] = rs.getNString("slot_03_id");
                     values2[0] = rs.getNString("slot_04_id");
 
-                    p.getInventory().setArmorContents(ItemManager.setItemStackData(values));
-                    p.getInventory().setExtraContents(ItemManager.setItemStackData(values2));
+                    ItemStack[] tmparmor = ItemManager.setItemStackData(values);
+                    p.getInventory().setArmorContents(tmparmor);
+                    ItemStack[] tmpoff = ItemManager.setItemStackData(values);
+                    p.getInventory().setExtraContents(tmpoff);
+                    if (ConfigManager.playerFile)
+                    {
+                        savePlayerFileLoad(p, tmparmor, tmpoff);
+                    }
                     rs.close();
-                    PlayertoSql.getInstance().getLogger().info("Armor and offhand loaded for "+p.getName()+" !");
                 }
-                catch (SQLException ex)
+                catch (Exception ex)
                 {
                     PlayertoSql.getInstance().getLogger().warning(ex.getMessage());
                 }
