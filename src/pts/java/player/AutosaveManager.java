@@ -13,6 +13,8 @@ public class AutosaveManager
 {
     PlayerManager pm;
 
+    List<Player> ap = new ArrayList<>();
+
     public AutosaveManager()
     {
         //get playerManager
@@ -25,21 +27,26 @@ public class AutosaveManager
     //start async timer task for autosave
     private void runTask()
     {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), this::autosave, ConfigManager.autosaveInterval * 60 * 20L, ConfigManager.autosaveInterval * 60 * 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), this::prepareautosave, ConfigManager.autosaveInterval * 60 * 20L, ConfigManager.autosaveInterval * 60 * 20L);
     }
 
+
+    private void prepareautosave()
+    {
+        ap = new ArrayList<>(Bukkit.getOnlinePlayers());
+        Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), this::autosave, 100);
+    }
     //try to autosave player
     private void autosave()
     {
-        //check if player online
         if (!Bukkit.getOnlinePlayers().isEmpty())
         {
-            //get all player
-            List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
             //for each player check if online and save
-            for (Player p : onlinePlayers)
+
+            for (Player p : ap)
             {
-                if (p.isOnline())
+                //check if player online
+                if (p != null && p.isOnline())
                 {
                     pm.savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false,"autosave");
                 }
@@ -49,16 +56,19 @@ public class AutosaveManager
                 }
             }
         }
+        ap.clear();
         //if all player saved try to save player unsaved player
         PlayertoSql.getInstance().getPlayerManager().trySaveMissingPlayerData(false);
     }
 
+    /*
     public void onShutdownAutosave()
     {
         //get all player
         List<Player> onlinePlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
 
         //for each player check if online and save
+
         for (Player p : onlinePlayers)
         {
             if (p.isOnline())
@@ -75,4 +85,6 @@ public class AutosaveManager
             }
         }
     }
+
+     */
 }
