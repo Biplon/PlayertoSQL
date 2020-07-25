@@ -31,6 +31,8 @@ public class PlayerManager
     public final ArrayList<UUID> disabledPlayerSaved = new ArrayList();
     public final ArrayList<UUID> disabledPlayerLoaded = new ArrayList();
 
+    private final ArrayList<UUID> playerloaded = new ArrayList<>();
+
     //date time for logfiles
     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd hh-mm-ss");
 
@@ -65,9 +67,11 @@ public class PlayerManager
     public void clearPlayerFile()
     {
         File folder = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/");
+        File folder2 = new File(PlayertoSql.getInstance().getDataFolder() + "/ptsload/");
         try
         {
             FileUtils.cleanDirectory(folder);
+            FileUtils.cleanDirectory(folder2);
         }
         catch (IOException e)
         {
@@ -100,12 +104,12 @@ public class PlayerManager
     }
 
     //write player savefile if enabled
-    private void savePlayerFile(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest,String savetyp)
+    private void savePlayerFile(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, String savetyp)
     {
         UUID uuid = p.getUniqueId();
         try
         {
-            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/"+ p.getName() + "-" + uuid.toString() + ".txt");
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptssaves/" + p.getName() + "-" + uuid.toString() + ".txt");
             if (!save_file.exists())
             {
                 save_file.getParentFile().mkdirs();
@@ -113,7 +117,7 @@ public class PlayerManager
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
             Date time = new Date();
-            bw.write("=["+ savetyp +"]======[" + sdf.format(time) + "]=======");
+            bw.write("=[" + savetyp + "]======[" + sdf.format(time) + "]=======");
             bw.newLine();
             bw.write("[inventory]");
             bw.newLine();
@@ -163,12 +167,12 @@ public class PlayerManager
         }
     }
 
-    private void savePlayerFileLoad(Player p, ItemStack[] tmp, ItemStack[] tmp2,String type)
+    private void savePlayerFileLoad(Player p, ItemStack[] tmp, ItemStack[] tmp2, String type)
     {
         UUID uuid = p.getUniqueId();
         try
         {
-            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptsload/"+ p.getName() + "-" + uuid.toString() + ".txt");
+            File save_file = new File(PlayertoSql.getInstance().getDataFolder() + "/ptsload/" + p.getName() + "-" + uuid.toString() + ".txt");
             if (!save_file.exists())
             {
                 save_file.getParentFile().mkdirs();
@@ -176,7 +180,7 @@ public class PlayerManager
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(save_file, true));
             Date time = new Date();
-            bw.write("=[load "+ type +"]======[" + sdf.format(time) + "]=======");
+            bw.write("=[load " + type + "]======[" + sdf.format(time) + "]=======");
             bw.newLine();
             for (ItemStack item : tmp)
             {
@@ -207,29 +211,40 @@ public class PlayerManager
     }
 
     //check if player not on disabledPlayerSaved list or the list is ignored then player load
-    public void savePlayer(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList,String savetyp)
+    public void savePlayer(Player p, ItemStack[] inventory, ItemStack[] armor, ItemStack[] offhand, ItemStack[] enderchest, boolean ignoreList, String savetyp)
     {
         UUID uuid = p.getUniqueId();
         if (ConfigManager.playercreate || DatabaseManager.getInstance().isPlayerExist(uuid.toString()))
         {
-            if (!disabledPlayerSaved.contains(uuid) || ignoreList)
+            if (playerloaded.contains(uuid))
             {
-                if (DatabaseManager.getInstance().isPlayerInventoryDataNotSaved(uuid, inventory))
+                if (!disabledPlayerSaved.contains(uuid) || ignoreList)
                 {
-                    unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
+                    if (DatabaseManager.getInstance().isPlayerInventoryDataNotSaved(uuid, inventory))
+                    {
+                        unsavedPlayerInventory.add(new PTSPlayerInventory(uuid, inventory));
+                    }
+                    if (DatabaseManager.getInstance().isPlayerArmorNotSaved(uuid, armor, offhand))
+                    {
+                        unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
+                    }
+                    if (DatabaseManager.getInstance().isPlayerEnderchestDataNotSaved(uuid, enderchest))
+                    {
+                        unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
+                    }
                 }
-                if (DatabaseManager.getInstance().isPlayerArmorNotSaved(uuid, armor, offhand))
+                if (ConfigManager.playerFile)
                 {
-                    unsavedPlayerArmor.add(new PTSPlayerArmor(uuid, armor, offhand));
+                    savePlayerFile(p, inventory, armor, offhand, enderchest, savetyp);
                 }
-                if (DatabaseManager.getInstance().isPlayerEnderchestDataNotSaved(uuid, enderchest))
+                if (savetyp.equals("quitsave"))
                 {
-                    unsavedPlayerEnderchest.add(new PTSPlayerEnderchest(uuid, enderchest));
+                    playerloaded.remove(uuid);
                 }
             }
-            if (ConfigManager.playerFile)
+            else
             {
-                savePlayerFile(p, inventory, armor, offhand, enderchest,savetyp);
+                PlayertoSql.getInstance().getLogger().info("Player could not be saved because it was not loaded!");
             }
         }
     }
@@ -265,7 +280,7 @@ public class PlayerManager
                     p.getInventory().setStorageContents(tmpinv);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpinv, null,"inventory");
+                        savePlayerFileLoad(p, tmpinv, null, "inventory");
                     }
                     rs.close();
                 }
@@ -308,7 +323,7 @@ public class PlayerManager
                     p.getEnderChest().setContents(tmpend);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpend, null,"enderchest");
+                        savePlayerFileLoad(p, tmpend, null, "enderchest");
                     }
                     rs.close();
                 }
@@ -348,7 +363,7 @@ public class PlayerManager
                     p.getInventory().setExtraContents(tmpoff);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmparmor, tmpoff,"armor offhand");
+                        savePlayerFileLoad(p, tmparmor, tmpoff, "armor offhand");
                     }
                     rs.close();
                 }
@@ -369,10 +384,14 @@ public class PlayerManager
                     }
                 }
             }
+            if (!playerloaded.contains(p.getUniqueId()))
+            {
+                playerloaded.add(p.getUniqueId());
+            }
         }
         else
         {
-            PlayertoSql.getInstance().getLogger().info("Loading for "+ p.getName()+" is disabled!");
+            PlayertoSql.getInstance().getLogger().info("Loading for " + p.getName() + " is disabled!");
         }
     }
 

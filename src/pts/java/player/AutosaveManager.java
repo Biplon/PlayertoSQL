@@ -1,6 +1,5 @@
 package pts.java.player;
 
-import org.bukkit.inventory.ItemStack;
 import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
@@ -12,8 +11,6 @@ import java.util.List;
 public class AutosaveManager
 {
     PlayerManager pm;
-
-    List<Player> ap = new ArrayList<>();
 
     public AutosaveManager()
     {
@@ -27,15 +24,9 @@ public class AutosaveManager
     //start async timer task for autosave
     private void runTask()
     {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), this::prepareautosave, ConfigManager.autosaveInterval * 60 * 20L, ConfigManager.autosaveInterval * 60 * 20L);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(PlayertoSql.getInstance(), this::autosave, ConfigManager.autosaveInterval * 60 * 20L, ConfigManager.autosaveInterval * 60 * 20L);
     }
 
-
-    private void prepareautosave()
-    {
-        ap = new ArrayList<>(Bukkit.getOnlinePlayers());
-        Bukkit.getScheduler().runTaskLaterAsynchronously(PlayertoSql.getInstance(), this::autosave, 100);
-    }
     //try to autosave player
     private void autosave()
     {
@@ -43,23 +34,19 @@ public class AutosaveManager
         {
             //for each player check if online and save
 
-            for (Player p : ap)
+            for (Player p : Bukkit.getOnlinePlayers())
             {
                 //check if player online
                 if (p != null && p.isOnline())
                 {
                     pm.savePlayer(p, p.getInventory().getStorageContents(), p.getInventory().getArmorContents(), p.getInventory().getExtraContents(), p.getEnderChest().getContents(),false,"autosave");
                 }
-                else
-                {
-                    PlayertoSql.getInstance().getLogger().warning("Player not auto saved! Player is offline");
-                }
             }
         }
-        ap.clear();
         //if all player saved try to save player unsaved player
         PlayertoSql.getInstance().getPlayerManager().trySaveMissingPlayerData(false);
     }
+
 
     /*
     public void onShutdownAutosave()
