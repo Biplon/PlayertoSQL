@@ -50,6 +50,7 @@ public class PlayerManager
                 if (ConfigManager.playercreate)
                 {
                     DatabaseManager.getInstance().createPlayer(p);
+                    playerloaded.add(p.getUniqueId());
                 }
                 else
                 {
