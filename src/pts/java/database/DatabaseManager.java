@@ -1,6 +1,5 @@
 package pts.java.database;
 
-import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import pts.java.player.ItemManager;
 import org.bukkit.entity.Player;
@@ -24,9 +23,9 @@ public class DatabaseManager
 
     static String date;
 
-    static String updateInventoryStatement = "";
-    static String updateArmorStatement = "";
-    static String updateEnderChestStatement = "";
+    static String updateInventoryStatement;
+    static String updateArmorStatement;
+    static String updateEnderChestStatement;
 
     public static byte inventoryLength = 36;
     public static byte enderChestLength = 27;
@@ -92,11 +91,11 @@ public class DatabaseManager
     //load all config values
     private void loadConfigValues()
     {
-        dbname = ConfigManager.getConfigValueString("database.mysql.databaseName");
-        playerTableName = ConfigManager.getConfigValueString("database.mysql.tableNameplayer");
-        playerInventoryTableName = ConfigManager.getConfigValueString("database.mysql.tableNameinventory");
-        playerInventoryArmorTableName = ConfigManager.getConfigValueString("database.mysql.tableNamearmor");
-        playerEnderChestTableName = ConfigManager.getConfigValueString("database.mysql.tableNameenderchest");
+        dbname = PlayertoSql.getInstance().getConfig().getString("database.mysql.databaseName");
+        playerTableName = PlayertoSql.getInstance().getConfig().getString("database.mysql.tableNameplayer");
+        playerInventoryTableName = PlayertoSql.getInstance().getConfig().getString("database.mysql.tableNameinventory");
+        playerInventoryArmorTableName = PlayertoSql.getInstance().getConfig().getString("database.mysql.tableNamearmor");
+        playerEnderChestTableName = PlayertoSql.getInstance().getConfig().getString("database.mysql.tableNameenderchest");
 
         Date dt = new Date();
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -106,15 +105,14 @@ public class DatabaseManager
     //create connection with db
     private void createConnection(boolean reconnect)
     {
-
         String ssl = "";
-        String username = ConfigManager.getConfigValueString("database.mysql.user");
-        String password = ConfigManager.getConfigValueString("database.mysql.password");
-        if (ConfigManager.getConfigValueBool("database.mysql.host"))
+        String username = PlayertoSql.getInstance().getConfig().getString("database.mysql.user");
+        String password = PlayertoSql.getInstance().getConfig().getString("database.mysql.password");
+        if (PlayertoSql.getInstance().getConfig().getBoolean("database.mysql.host"))
         {
             ssl = "&sslMode=REQUIRED";
         }
-        String server = "jdbc:mysql://" + ConfigManager.getConfigValueString("database.mysql.host") + ":" + ConfigManager.getConfigValueString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true" + ssl;
+        String server = "jdbc:mysql://" + PlayertoSql.getInstance().getConfig().getString("database.mysql.host") + ":" + PlayertoSql.getInstance().getConfig().getString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true" + ssl;
         try
         {
             connection = DriverManager.getConnection(server, username, password);
@@ -196,7 +194,8 @@ public class DatabaseManager
                             " (`uuid_player` CHAR(128) NOT NULL," +
                             "`name` CHAR(128) NOT NULL," +
                             "`last_login` DATE NOT NULL," +
-                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
+                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8" +
+                            " ROW_FORMAT = DYNAMIC ;";
 
                     query = connection.prepareStatement(data);
                     query.execute();
@@ -204,7 +203,8 @@ public class DatabaseManager
                     data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playerInventoryTableName + " " +
                             "(`uuid_player` CHAR(128) NOT NULL," +
                             "" + createInventoryQueryString() + "" +
-                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
+                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8 " +
+                            " ROW_FORMAT = DYNAMIC;";
 
                     query = connection.prepareStatement(data);
                     query.execute();
@@ -216,7 +216,8 @@ public class DatabaseManager
                             "`slot_02_id` LONGTEXT NULL," +
                             "`slot_03_id` LONGTEXT NULL," +
                             "`slot_04_id` LONGTEXT NULL," + //offhand
-                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
+                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8" +
+                            " ROW_FORMAT = DYNAMIC;";
 
                     query = connection.prepareStatement(data);
                     query.execute();
@@ -224,7 +225,8 @@ public class DatabaseManager
                     data = "CREATE TABLE IF NOT EXISTS " + dbname + "." + playerEnderChestTableName + " " +
                             "(`uuid_player` CHAR(128) NOT NULL," +
                             "" + createEnderQuery() + "" +
-                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8;";
+                            " PRIMARY KEY (`uuid_player`)) ENGINE = InnoDB  DEFAULT CHARSET=utf8" +
+                            " ROW_FORMAT = DYNAMIC;";
 
                     query = connection.prepareStatement(data);
                     query.execute();

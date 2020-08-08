@@ -36,51 +36,9 @@ public class ConfigManager
         }
 
         //get values
-        joinLoadDelay = getConfigValueInt("general.loaddelay");
-        playerFile = getConfigValueBool("general.playerfile");
-        autosaveInterval = getConfigValueInt("general.autosaveinterval");
-        playercreate = getConfigValueBool("general.playercreate");
-    }
-
-    //try to get String value
-    public static String getConfigValueString(String value)
-    {
-        if (!PlayertoSql.getInstance().getConfig().contains(value))
-        {
-            PlayertoSql.getInstance().getLogger().severe("Value: " + value + " not found in config.yml of" + PlayertoSql.getInstance().getName());
-            return "ValueNotFound";
-        }
-        else
-        {
-            return PlayertoSql.getInstance().getConfig().getString(value);
-        }
-    }
-
-    //try to get Int value
-    public static int getConfigValueInt(String value)
-    {
-        if (!PlayertoSql.getInstance().getConfig().contains(value))
-        {
-            PlayertoSql.getInstance().getLogger().severe("Value: " + value + " not found in config.yml of" + PlayertoSql.getInstance().getName());
-            return 0;
-        }
-        else
-        {
-            return PlayertoSql.getInstance().getConfig().getInt(value);
-        }
-    }
-
-    //try to get Boolean
-    public static Boolean getConfigValueBool(String value)
-    {
-        if (!PlayertoSql.getInstance().getConfig().contains(value))
-        {
-            PlayertoSql.getInstance().getLogger().severe("Value: " + value + " not found in config.yml of" + PlayertoSql.getInstance().getName());
-            return false;
-        }
-        else
-        {
-            return PlayertoSql.getInstance().getConfig().getBoolean(value);
-        }
+        joinLoadDelay = PlayertoSql.getInstance().getConfig().getInt("general.loaddelay");
+        playerFile = PlayertoSql.getInstance().getConfig().getBoolean("general.playerfile");
+        autosaveInterval = PlayertoSql.getInstance().getConfig().getInt("general.autosaveinterval");
+        playercreate = PlayertoSql.getInstance().getConfig().getBoolean("general.playercreate");
     }
 }

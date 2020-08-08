@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import pts.java.PlayertoSql;
 
-import java.io.*;
 import java.util.Objects;
 
 public class ItemManager

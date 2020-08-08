@@ -1,6 +1,5 @@
 package pts.java.player;
 
-import org.bukkit.Bukkit;
 import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import pts.java.database.DatabaseManager;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -54,13 +52,13 @@ public class PlayerManager
                 }
                 else
                 {
-                    PlayertoSql.getInstance().getLogger().info("Player not create! Create player disabled");
+                    PlayertoSql.getInstance().getLogger().info(p.getName() + " not create! Create player disabled");
                 }
             }
         }
         else
         {
-            PlayertoSql.getInstance().getLogger().warning("Player not create/load! Player is offline");
+            PlayertoSql.getInstance().getLogger().warning(p.getName() + " not create/load! Player is offline");
         }
     }
 
@@ -245,7 +243,7 @@ public class PlayerManager
             }
             else
             {
-                PlayertoSql.getInstance().getLogger().info("Player could not be saved because it was not loaded!");
+                PlayertoSql.getInstance().getLogger().info(p.getName() + " could not be saved because it was not loaded!");
             }
         }
     }

@@ -22,6 +22,16 @@ public class PlayertoSql extends JavaPlugin
 
     static PlayerManager playerManager;
 
+    public static PlayertoSql getInstance()
+    {
+        return instance;
+    }
+
+    public PlayerManager getPlayerManager()
+    {
+        return playerManager;
+    }
+
     //on enable plugin load config reg events and commands check if autosave an start it
     public void onEnable()
     {
@@ -34,7 +44,7 @@ public class PlayertoSql extends JavaPlugin
             new PlayerManagement();
             regEvents();
             regCommands();
-            if (ConfigManager.getConfigValueBool("general.autosave"))
+            if (getConfig().getBoolean("general.autosave"))
             {
                 autosaveManager = new AutosaveManager();
             }
@@ -77,13 +87,4 @@ public class PlayertoSql extends JavaPlugin
         Bukkit.getLogger().info("[PlayertoSql] has been disabled!");
     }
 
-    public static PlayertoSql getInstance()
-    {
-        return instance;
-    }
-
-    public PlayerManager getPlayerManager()
-    {
-        return playerManager;
-    }
 }
