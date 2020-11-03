@@ -255,31 +255,30 @@ public class PlayerManager
         {
             DatabaseManager.getInstance().updatePlayerData(p);
             ResultSet rs;
-            String[] values;
+            ItemStack[] values;
 
             if (isPlayerSaved(p.getUniqueId(), "inventory"))
             {
                 try
                 {
                     rs = DatabaseManager.getInstance().loadPlayerInventoryData(p.getUniqueId());
-                    values = new String[DatabaseManager.inventoryLength];
+                    values = new ItemStack[DatabaseManager.inventoryLength];
                     rs.next();
                     for (int i = 0; i < DatabaseManager.inventoryLength; i++)
                     {
                         if (i < 10)
                         {
-                            values[i] = rs.getNString("slot_0" + i + "_id");
+                            values[i] = ItemManager.setItemStackData(rs.getNString("slot_0" + i + "_id"));
                         }
                         else
                         {
-                            values[i] = rs.getNString("slot_" + i + "_id");
+                            values[i] = ItemManager.setItemStackData(rs.getNString("slot_" + i + "_id"));
                         }
                     }
-                    ItemStack[] tmpinv = ItemManager.setItemStackData(values);
-                    p.getInventory().setStorageContents(tmpinv);
+                    p.getInventory().setStorageContents(values);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpinv, null, "inventory");
+                        savePlayerFileLoad(p, values, null, "inventory");
                     }
                     rs.close();
                 }
@@ -305,24 +304,23 @@ public class PlayerManager
                 {
                     rs = DatabaseManager.getInstance().loadPlayerEnderchestData(p.getUniqueId());
                     rs.next();
-                    values = new String[DatabaseManager.enderChestLength];
+                    values = new ItemStack[DatabaseManager.enderChestLength];
                     for (int i = 0; i < DatabaseManager.enderChestLength; i++)
                     {
 
                         if (i < 10)
                         {
-                            values[i] = rs.getNString("slot_0" + i + "_id");
+                            values[i] = ItemManager.setItemStackData(rs.getNString("slot_0" + i + "_id"));
                         }
                         else
                         {
-                            values[i] = rs.getNString("slot_" + i + "_id");
+                            values[i] = ItemManager.setItemStackData(rs.getNString("slot_" + i + "_id"));
                         }
                     }
-                    ItemStack[] tmpend = ItemManager.setItemStackData(values);
-                    p.getEnderChest().setContents(tmpend);
+                    p.getEnderChest().setContents(values);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmpend, null, "enderchest");
+                        savePlayerFileLoad(p, values, null, "enderchest");
                     }
                     rs.close();
                 }
@@ -348,21 +346,21 @@ public class PlayerManager
                 {
                     rs = DatabaseManager.getInstance().loadPlayerArmor(p.getUniqueId());
                     rs.next();
-                    values = new String[4];
-                    String[] values2 = new String[1];
-                    values[0] = rs.getNString("slot_00_id");
-                    values[1] = rs.getNString("slot_01_id");
-                    values[2] = rs.getNString("slot_02_id");
-                    values[3] = rs.getNString("slot_03_id");
-                    values2[0] = rs.getNString("slot_04_id");
+                    values = new ItemStack[4];
+                    ItemStack[] values2 = new ItemStack[1];
+                    values[0] = ItemManager.setItemStackData(rs.getNString("slot_00_id"));
+                    values[1] = ItemManager.setItemStackData(rs.getNString("slot_01_id"));
+                    values[2] = ItemManager.setItemStackData(rs.getNString("slot_02_id"));
+                    values[3] = ItemManager.setItemStackData(rs.getNString("slot_03_id"));
+                    values2[0] = ItemManager.setItemStackData(rs.getNString("slot_04_id"));
 
-                    ItemStack[] tmparmor = ItemManager.setItemStackData(values);
-                    p.getInventory().setArmorContents(tmparmor);
-                    ItemStack[] tmpoff = ItemManager.setItemStackData(values2);
-                    p.getInventory().setExtraContents(tmpoff);
+
+                    p.getInventory().setArmorContents(values);
+
+                    p.getInventory().setExtraContents(values2);
                     if (ConfigManager.playerFile)
                     {
-                        savePlayerFileLoad(p, tmparmor, tmpoff, "armor offhand");
+                        savePlayerFileLoad(p, values, values2, "armor offhand");
                     }
                     rs.close();
                 }

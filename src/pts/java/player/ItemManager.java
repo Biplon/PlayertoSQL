@@ -1,54 +1,63 @@
 package pts.java.player;
 
-import com.comphenix.protocol.utility.StreamSerializer;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import pts.java.PlayertoSql;
 
-import java.util.Objects;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.output.ByteArrayOutputStream;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class ItemManager
 {
     //serializeItemStack itemStack and return string array with values
-    public static String[] getItemStackData(ItemStack[] item)
+    public static String getItemStackData(ItemStack item)
     {
-        String[] values = new String[item.length];
-        for (int i = 0; i < item.length; i++)
+        try
         {
-            if ((item[i] != null) && (item[i].getType() != Material.AIR))
-            {
-                try
-                {
-                    Objects.requireNonNull(item[i].getItemMeta()).getLocalizedName();
-                    values[i] = StreamSerializer.getDefault().serializeItemStack(item[i]);
-                }
-                catch (Exception e)
-                {
-                    PlayertoSql.getInstance().getLogger().warning(e.getMessage());
-                }
-            }
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            // Write the size of the inventory
+            dataOutput.writeInt(1);
+
+            // Save every element in the list
+            dataOutput.writeObject(item);
+
+            // Serialize that array
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
         }
-        return values;
+        catch (Exception e)
+        {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
     }
 
     //deserializeItemStack string and return itemStack array with values
-    public static ItemStack[] setItemStackData(String[] string)
+    public static ItemStack setItemStackData(String item)
     {
-        ItemStack[] itemStacks = new ItemStack[string.length];
-        for (int i = 0; i < string.length; i++)
+        try
         {
-            if (string[i] != null && !string[i].equals(""))
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(item));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            ItemStack[] items = new ItemStack[dataInput.readInt()];
+
+            // Read the serialized inventory
+            for (int i = 0; i < items.length; i++)
             {
-                try
-                {
-                    itemStacks[i] = StreamSerializer.getDefault().deserializeItemStack(string[i]);
-                }
-                catch (Exception e)
-                {
-                    PlayertoSql.getInstance().getLogger().warning(e.getMessage());
-                }
+                items[i] = (ItemStack) dataInput.readObject();
             }
+
+            dataInput.close();
+            return items[0];
         }
-        return itemStacks;
+        catch (ClassNotFoundException | IOException e)
+        {
+            e.getMessage();
+        }
+        return null;
     }
 }

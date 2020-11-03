@@ -184,6 +184,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -264,6 +268,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -297,6 +305,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -326,6 +338,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -359,15 +375,18 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 try
                 {
-                    String[] tmp = ItemManager.getItemStackData(items);
                     PreparedStatement query = connection.prepareStatement(updateInventoryStatement);
                     for (int i = 1; i <= inventoryLength; i++)
                     {
-                        query.setString(i, tmp[i - 1]);
+                        query.setString(i,ItemManager.getItemStackData(items[i-1]));
                     }
                     query.setString(37, uuid.toString());
                     query.execute();
@@ -395,15 +414,18 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 try
                 {
-                    String[] tmp = ItemManager.getItemStackData(items);
                     PreparedStatement query = connection.prepareStatement(updateEnderChestStatement);
                     for (int i = 1; i <= enderChestLength; i++)
                     {
-                        query.setString(i, tmp[i - 1]);
+                        query.setString(i,ItemManager.getItemStackData(items[i-1]));
                     }
                     query.setString(28, uuid.toString());
                     query.execute();
@@ -431,18 +453,21 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 try
                 {
-                    String[] tmp = ItemManager.getItemStackData(itemsArmor);
                     PreparedStatement query = connection.prepareStatement(updateArmorStatement);
 
-                    query.setString(1, tmp[0]);
-                    query.setString(2, tmp[1]);
-                    query.setString(3, tmp[2]);
-                    query.setString(4, tmp[3]);
-                    query.setString(5, ItemManager.getItemStackData(offhand)[0]);
+                    query.setString(1,  ItemManager.getItemStackData(itemsArmor[0]));
+                    query.setString(2,  ItemManager.getItemStackData(itemsArmor[1]));
+                    query.setString(3,  ItemManager.getItemStackData(itemsArmor[2]));
+                    query.setString(4,  ItemManager.getItemStackData(itemsArmor[3]));
+                    query.setString(5, ItemManager.getItemStackData(offhand[0]));
                     query.setString(6, uuid.toString());
                     query.execute();
                     query.close();
@@ -470,6 +495,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -507,6 +536,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
@@ -541,6 +574,10 @@ public class DatabaseManager
     {
         try
         {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
             if (connection != null && !connection.isClosed())
             {
                 String data = "";
