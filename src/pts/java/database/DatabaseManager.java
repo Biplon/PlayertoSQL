@@ -112,7 +112,7 @@ public class DatabaseManager
         {
             ssl = "&sslMode=REQUIRED";
         }
-        String server = "jdbc:mysql://" + PlayertoSql.getInstance().getConfig().getString("database.mysql.host") + ":" + PlayertoSql.getInstance().getConfig().getString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true" + ssl;
+        String server = "jdbc:mysql://" + PlayertoSql.getInstance().getConfig().getString("database.mysql.host") + ":" + PlayertoSql.getInstance().getConfig().getString("database.mysql.port") + "/" + dbname + "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true&connectTimeout=0" + ssl;
         try
         {
             connection = DriverManager.getConnection(server, username, password);
@@ -604,5 +604,37 @@ public class DatabaseManager
             throwable.printStackTrace();
         }
         return null;
+    }
+
+    public void checkConnection()
+    {
+        try
+        {
+            if (connection == null || connection.isClosed())
+            {
+                createConnection(true);
+            }
+            if (connection != null && !connection.isClosed())
+            {
+                String data = "";
+                PreparedStatement query;
+                try
+                {
+                    data = "SELECT * FROM " + dbname + "." + playerEnderChestTableName + " LIMIT 1; ";
+
+                    query = connection.prepareStatement(data);
+                    query.executeQuery();
+                }
+                catch (SQLException e)
+                {
+                    e.printStackTrace();
+                    PlayertoSql.getInstance().getLogger().severe("Error check connection! Error: " + e.getMessage());
+                }
+            }
+        }
+        catch (SQLException throwable)
+        {
+            throwable.printStackTrace();
+        }
     }
 }

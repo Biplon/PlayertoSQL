@@ -4,6 +4,7 @@ import pts.java.ConfigManager;
 import pts.java.PlayertoSql;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import pts.java.database.DatabaseManager;
 
 public class AutosaveManager
 {
@@ -26,6 +27,7 @@ public class AutosaveManager
     //try to autosave player
     private void autosave()
     {
+        DatabaseManager.getInstance().checkConnection();
         if (!Bukkit.getOnlinePlayers().isEmpty())
         {
             //for each player check if online and save
